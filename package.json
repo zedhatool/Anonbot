@@ -1,0 +1,30 @@
+{
+  "name": "anonbotv2",
+  "version": "1.0.0",
+  "description": "A better West Lafayette Anonbot",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bootstrap": "^4.1.2",
+    "canvas": "^2.0.0-alpha.12",
+    "express": "^4.16.3",
+    "instagram-private-api": "^0.6.8",
+    "merge-images": "^1.1.0",
+    "popper.js": "^1.14.3",
+    "socket.io": "^2.1.1"
+  },
+  "engines": {
+    "node": "8.x"
+  },
+  "repository": {
+    "url": "https://glitch.com/edit/#!/hello-express"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node",
+    "glitch",
+    "express"
+  ]
+}
