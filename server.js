@@ -5,6 +5,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var sleep = require('sleep');
+var wrap = require('word-wrap');
 var Client = require('instagram-private-api').V1;
 var device = new Client.Device('bogdan.stencil');
 var storage = new Client.CookieFileStorage(__dirname + '/cookies/bogdan.json');
@@ -17,11 +18,12 @@ const ctx = canvas.getContext('2d');
 app.use('/public', express.static('public'));
 
 function createImage(text) {
+  formatted = wrap(text, {indent: '', width: 28});
   ctx.fillStyle = '#404040';
   ctx.fillRect(0, 0, 1080, 1080);
-  ctx.font = '40px "SourceCodePro"';
+  ctx.font = '62px "SourceCodePro"';
   ctx.fillStyle = '#FFF';
-  ctx.fillText(text, 100, 50);
+  ctx.fillText(formatted, 17, 65);
 
   var buf = canvas.toBuffer();
   fs.writeFileSync("test.png", buf);
@@ -58,7 +60,6 @@ function publish() {
   var contents = fs.readFileSync('./submission.txt', 'utf-8');
   if (contents.length != 0) {
     var data = getData();
-    console.log("Data: " + data);
     Client.Session.create(device, storage, 'bogdan.stencil', process.env.BOGDAN_PASSWORD)
       .then(function(session) {
         Client.Upload.photo(session, './test.jpeg')
@@ -73,7 +74,7 @@ function publish() {
 
       clearData();
   }
-} setInterval(publish, 5000);
+} setInterval(publish, 1000);
 
 publish();
 
