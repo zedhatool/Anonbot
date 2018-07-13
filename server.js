@@ -4,7 +4,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var Client = require('instagram-private-api').V1;
 var device = new Client.Device('bogdan.stencil');
-var storage = new Client.CookieFileStorage(__dirname + './cookies/bogdan.json');
+var storage = new Client.CookieFileStorage(__dirname + '/cookies/bogdan.json');
 //const mergeImages = require('merge-images');
 const { createCanvas, loadImage, registerFont } = require('canvas');
 registerFont('./SourceCodePro-Regular.ttf', {family: 'SourceCodePro'});
@@ -21,7 +21,7 @@ function createImage(text) {
   })
 }
 
-io.on(connection, function(socket) {
+io.on('connection', function(socket) {
   socket.on('submission', function(data) {
     Client.Session.create(device, storage, 'bogdan.stencil', process.env.BOGDANPASSWORD)
       .then(function(session) {
