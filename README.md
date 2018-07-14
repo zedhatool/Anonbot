@@ -30,4 +30,4 @@ Anonbot is not endorsed by or affiliated with the West Lafayette High School in 
 If you believe a post should be taken down or have any questions/concerns about Anonbot, please email mattbstanciu@gmail.com
 
 ---
-[View on Glitch](https://glitch.com/edit/#!/anonbotwl?path=server.js:1:0)
+[View on Glitch](https://glitch.com/edit/#!/anonbotwl?path=README.md:1:0)
