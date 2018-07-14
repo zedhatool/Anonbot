@@ -7,8 +7,8 @@ var io = require('socket.io')(http);
 var sleep = require('sleep');
 var wrap = require('word-wrap');
 var Client = require('instagram-private-api').V1;
-var device = new Client.Device('bogdan.stencil');
-var storage = new Client.CookieFileStorage(__dirname + '/cookies/bogdan.json');
+var device = new Client.Device('anonbot.wl');
+var storage = new Client.CookieFileStorage(__dirname + '/cookies/anonbot.json');
 const pngToJpeg = require('png-to-jpeg');
 const { createCanvas, loadImage, registerFont } = require('canvas');
 registerFont('./SourceCodePro-Regular.ttf', {family: 'SourceCodePro'});
@@ -26,13 +26,13 @@ function createImage(text) {
   ctx.fillText(formatted, 17, 65);
 
   var buf = canvas.toBuffer();
-  fs.writeFileSync("test.png", buf);
+  fs.writeFileSync("submission.png", buf);
 
   //convert to jpeg becuase api only currently support jpeg
-  let buffer = fs.readFileSync("./test.png");
+  let buffer = fs.readFileSync("./submission.png");
   pngToJpeg()(buffer)
-    .then(output => fs.writeFileSync("./test.jpeg", output));
-  fs.unlinkSync('./test.png');
+    .then(output => fs.writeFileSync("./submission.jpeg", output));
+  fs.unlinkSync('./submission.png');
 }
 
 function getData() {
@@ -64,14 +64,14 @@ function logSubmission(ip) {
 function logPost(text) {
   var date = new Date();
 
-  fs.readFile('./logs-posts.json', 'utf8', function readFileCallback(err, data) {
+  fs.readFile('./logs-posts.json', 'utf-8', function readFileCallback(err, data) {
     if (err) {
       console.log(err);
     } else {
       var obj = JSON.parse(data);
       obj.postMade.push({hour: date, post: text});
       var json = JSON.stringify(obj);
-      fs.writeFile('./logs-posts.json', json, 'utf8', function(err) {
+      fs.writeFile('./logs-posts.json', json, 'utf-8', function(err) {
       if (err) {
         console.log(err);
       }
@@ -98,9 +98,9 @@ function publish() {
   var contents = fs.readFileSync('./submission.txt', 'utf-8');
   if (contents.length != 0) {
     var data = getData();
-    Client.Session.create(device, storage, 'bogdan.stencil', process.env.BOGDAN_PASSWORD)
+    Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
       .then(function(session) {
-        Client.Upload.photo(session, './test.jpeg')
+        Client.Upload.photo(session, './submission.jpeg')
           .then(function(upload) {
               console.log(upload.params.uploadId);
               return Client.Media.configurePhoto(session, upload.params.uploadId, data);
@@ -120,7 +120,7 @@ function getClientIP(req){ // Anonbot logs IPs for safety & moderation
     return req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 }
 
-app.get("/", function (request, response) {
+app.get("/", function(request, response) {
   response.sendFile(__dirname + '/index.html');
 });
 app.get("/submitted", function(request, response) {
