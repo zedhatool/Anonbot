@@ -46,14 +46,13 @@ function clearData() {
 
 function logSubmission(ip) {
   var date = new Date();
-  var currentHour = date.getHours();
 
   fs.readFile('./logs-submissions.json', 'utf8', function readFileCallback(err, data){
     if (err){
         console.log(err);
     } else {
     var obj = JSON.parse(data);
-    obj.submissionMade.push({hour: currentHour, addr: ip});
+    obj.submissionMade.push({hour: date, addr: ip});
     var json = JSON.stringify(obj);
     fs.writeFile('./logs-submissions.json', json, 'utf8', function(err) {
       if (err) {
@@ -64,7 +63,6 @@ function logSubmission(ip) {
 }
 function logPost(text) {
   var date = new Date();
-  var currentHour = date.getHours();
 
   fs.readFile('./logs-posts.json', 'utf8', function readFileCallback(err, data) {
     if (err) {
