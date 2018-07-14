@@ -47,14 +47,14 @@ function clearData() {
 function logSubmission(ip) {
   var date = new Date();
 
-  fs.readFile('./logs-submissions.json', 'utf8', function readFileCallback(err, data){
+  fs.readFile('./logs-submissions.json', 'utf-8', function readFileCallback(err, data){
     if (err){
         console.log(err);
     } else {
     var obj = JSON.parse(data);
     obj.submissionMade.push({hour: date, addr: ip});
     var json = JSON.stringify(obj);
-    fs.writeFile('./logs-submissions.json', json, 'utf8', function(err) {
+    fs.writeFile('./logs-submissions.json', json, 'utf-8', function(err) {
       if (err) {
         console.log(err);
       }
@@ -65,9 +65,7 @@ function logPost(text) {
   var date = new Date();
 
   fs.readFile('./logs-posts.json', 'utf-8', function readFileCallback(err, data) {
-    if (err) {
-      console.log(err);
-    } else {
+    if (err) { console.log(err) } else {
       var obj = JSON.parse(data);
       obj.postMade.push({hour: date, post: text});
       var json = JSON.stringify(obj);
@@ -86,18 +84,15 @@ io.on('connection', function(socket) {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     createImage(data);
     fs.writeFile("./submission.txt", data, 'utf-8', function(err) {
-      if (err) {
-        return console.log(err);
-      }
+      if (err) { return console.log(err); }
       console.log("submission saved");
     });
   });
 });
 
 function publish() {
-  var contents = fs.readFileSync('./submission.txt', 'utf-8');
-  if (contents.length != 0) {
-    var data = getData();
+  var data = getData();
+  if (data.length != 0) {
     Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
       .then(function(session) {
         Client.Upload.photo(session, './submission.jpeg')
