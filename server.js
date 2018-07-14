@@ -116,7 +116,7 @@ function publish() {
 
 publish();
 
-function getClientIP(req){ // Anonbot logs IPs for safety & mdoeration
+function getClientIP(req){ // Anonbot logs IPs for safety & moderation
     return req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 }
 
