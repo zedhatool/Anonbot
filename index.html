@@ -41,12 +41,6 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand"><a href="./index.html">Anonbot</a></h3>
-              <nav>
-                <ul class="nav masthead-nav">
-
-                </ul>
-              </nav>
             </div>
           </div>
 
@@ -56,7 +50,7 @@
               <input id="m" name="anon" type="text" placeholder="Enter your submission" autofocus>
             </form>
             <p class="lead">
-              <button type="submit" action="/submitted" form="f" class="btn btn-lg btn-default">Submit</button>
+              <button type="submit" form="f" class="btn btn-lg btn-default">Submit</button>
             </p>
           </div>
 
@@ -79,7 +73,7 @@
       $("form").submit(function() {
         socket.emit('submission', $("#m").val());
         $("#m").val('');
-        window.location = "localhost:3000/submitted";
+        window.location = "https://anonbotwl.glitch.me/submitted";
         return false;
       });
     </script>

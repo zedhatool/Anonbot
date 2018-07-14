@@ -4,10 +4,11 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var sleep = require('sleep');
 var wrap = require('word-wrap');
 var Client = require('instagram-private-api').V1;
 var device = new Client.Device('bogdan.stencil');
-var storage = new Client.CookieFileStorage('./cookies/bogdan.json');
+var storage = new Client.CookieFileStorage(__dirname + '/cookies/bogdan.json');
 const pngToJpeg = require('png-to-jpeg');
 const { createCanvas, loadImage, registerFont } = require('canvas');
 registerFont('./SourceCodePro-Regular.ttf', {family: 'SourceCodePro'});
@@ -35,10 +36,50 @@ function createImage(text) {
 }
 
 function getData() {
+  sleep.sleep(1);
   return fs.readFileSync('./submission.txt', 'utf-8');
 }
 function clearData() {
+  sleep.sleep(1);
   fs.truncate('./submission.txt', 0, function(){console.log('submission file cleared')});
+}
+
+function logSubmission(ip) {
+  var date = new Date();
+  var currentHour = date.getHours();
+
+  fs.readFile('./logs-submissions.json', 'utf8', function readFileCallback(err, data){
+    if (err){
+        console.log(err);
+    } else {
+    var obj = JSON.parse(data);
+    obj.submissionMade.push({hour: currentHour, addr: ip});
+    var json = JSON.stringify(obj);
+    fs.writeFile('./logs-submissions.json', json, 'utf8', function(err) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  }});
+}
+function logPost(text) {
+  var date = new Date();
+  var currentHour = date.getHours();
+
+  fs.readFile('./logs-posts.json', 'utf8', function readFileCallback(err, data) {
+    if (err) {
+      console.log(err);
+    } else {
+      var obj = JSON.parse(data);
+      obj.postMade.push({hour: currentHour, post: text});
+      var json = JSON.stringify(obj);
+      fs.writeFile('./logs-posts.json', json, 'utf8', function(err) {
+      if (err) {
+        console.log(err);
+      }
+    });
+    }
+  });
 }
 
 io.on('connection', function(socket) {
@@ -70,17 +111,22 @@ function publish() {
               console.log(medium.params)
           })
       });
-
+      logPost(data);
       clearData();
   }
 } setInterval(publish, 1000);
 
 publish();
 
+function getClientIP(req){ // Anonbot logs IPs for safety & mdoeration
+    return req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+}
+
 app.get("/", function (request, response) {
   response.sendFile(__dirname + '/index.html');
 });
 app.get("/submitted", function(request, response) {
+  logSubmission(getClientIP(request));
   response.sendFile(__dirname + '/submitted.html');
 });
 
