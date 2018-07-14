@@ -15,3 +15,6 @@ For moderation purposes, every submission, as well as the IP address of the subm
 Anonbot is not endorsed by or affiliated with the West Lafayette High School in any way. This is simply a small and fun project created by West Side students who want to submit confessions and announce things anonymously.
 
 If you believe a post should be taken down or have any questions/concerns about Anonbot, please email mattbstanciu@gmail.com
+
+---
+[View on Glitch](https://glitch.com/~anonbotwl)
