@@ -41,7 +41,7 @@
 
           <div class="masthead clearfix">
             <div class="inner">
-              <h3 class="masthead-brand"><a href="./index.html">Anonbot</a></h3>
+
               <nav>
                 <ul class="nav masthead-nav">
 
@@ -51,18 +51,18 @@
           </div>
 
           <div class="inner cover">
-            <h1 class="cover-heading">WL Anonbot</h1>
+            <h1 class="cover-heading">Anonbot Moderator</h1>
             <form action="" id="f" class="f">
-              <input id="m" name="anon" type="text" placeholder="Enter your submission" autofocus>
+              <input id="m" name="anon" type="text" placeholder="Enter link to the post" autofocus>
             </form>
             <p class="lead">
-              <button type="submit" action="/submitted" form="f" class="btn btn-lg btn-default">Submit</button>
+              <button type="submit" class="btn btn-lg btn-default">Submit</button>
             </p>
           </div>
 
           <div class="mastfoot">
             <div class="inner">
-              <p>Made with ❤ by the students of West Side</p>
+
             </div>
           </div>
 
@@ -77,9 +77,8 @@
     <script>
       var socket = io();
       $("form").submit(function() {
-        socket.emit('submission', $("#m").val());
+        socket.emit('delete', $("#m").val());
         $("#m").val('');
-        window.location = "localhost:3000/submitted";
         return false;
       });
     </script>

@@ -15,6 +15,7 @@
     "merge-images": "^1.1.0",
     "png-to-jpeg": "^1.0.1",
     "popper.js": "^1.14.3",
+    "request-ip": "^2.1.1",
     "sleep": "^5.1.1",
     "socket.io": "^2.1.1",
     "word-wrap": "^1.2.3"

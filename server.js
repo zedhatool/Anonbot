@@ -4,11 +4,10 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var sleep = require('sleep');
 var wrap = require('word-wrap');
 var Client = require('instagram-private-api').V1;
 var device = new Client.Device('bogdan.stencil');
-var storage = new Client.CookieFileStorage(__dirname + '/cookies/bogdan.json');
+var storage = new Client.CookieFileStorage('./cookies/bogdan.json');
 const pngToJpeg = require('png-to-jpeg');
 const { createCanvas, loadImage, registerFont } = require('canvas');
 registerFont('./SourceCodePro-Regular.ttf', {family: 'SourceCodePro'});
@@ -18,7 +17,7 @@ const ctx = canvas.getContext('2d');
 app.use('/public', express.static('public'));
 
 function createImage(text) {
-  formatted = wrap(text, {indent: '', width: 28});
+  var formatted = wrap(text, {indent: '', width: 28});
   ctx.fillStyle = '#404040';
   ctx.fillRect(0, 0, 1080, 1080);
   ctx.font = '62px "SourceCodePro"';
@@ -80,6 +79,9 @@ publish();
 
 app.get("/", function (request, response) {
   response.sendFile(__dirname + '/index.html');
+});
+app.get("/submitted", function(request, response) {
+  response.sendFile(__dirname + '/submitted.html');
 });
 
 http.listen(3000);
