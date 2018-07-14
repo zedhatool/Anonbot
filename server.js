@@ -71,7 +71,7 @@ function logPost(text) {
       console.log(err);
     } else {
       var obj = JSON.parse(data);
-      obj.postMade.push({hour: currentHour, post: text});
+      obj.postMade.push({hour: date, post: text});
       var json = JSON.stringify(obj);
       fs.writeFile('./logs-posts.json', json, 'utf8', function(err) {
       if (err) {
