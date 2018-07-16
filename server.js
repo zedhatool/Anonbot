@@ -106,7 +106,7 @@ function publish() {
       logPost(data);
       clearData();
   }
-} setInterval(publish, 1000);
+} setInterval(publish, 3000);
 
 publish();
 
