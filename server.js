@@ -36,11 +36,9 @@ function createImage(text) {
 }
 
 function getData() {
-  sleep.sleep(1);
   return fs.readFileSync('./submission.txt', 'utf-8');
 }
 function clearData() {
-  sleep.sleep(1);
   fs.truncate('./submission.txt', 0, function(){console.log('submission file cleared')});
 }
 
@@ -81,6 +79,7 @@ function logPost(text) {
 io.on('connection', function(socket) {
   socket.on('submission', function(data) {
     console.log("received " + data);
+    clearData();
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     createImage(data);
     fs.writeFile("./submission.txt", data, 'utf-8', function(err) {
