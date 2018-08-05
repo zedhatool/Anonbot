@@ -4,7 +4,7 @@ A better WL Anonbot, made with NodeJS
 # Rules
 Anonbot is moderated by a small team of dedicated students. They will remove any post that violates these rules, and they will IPban any user with repeated violations. The rules are very simple:
 
-1. Do not post anything that is against Instagram's policy (e.g. racist slurs)
+1. Do not post anything that is against Instagram's policy (e.g. racial slurs)
 2. Do not use Anonbot to spam the Instagram page
 
 If you use Anonbot safely and responsibly by following these two simple rules, you can create an enjoyable experience for everyone! Have fun!
