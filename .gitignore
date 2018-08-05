@@ -2,3 +2,5 @@ node_modules
 .env
 cookies/bogdan.json
 cookies/anonbot.json
+*.jpeg
+submission.jpeg

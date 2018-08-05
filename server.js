@@ -19,7 +19,7 @@ app.use('/public', express.static('public'));
 
 function createImage(text) {
   var formatted = wrap(text, {indent: '', width: 28});
-  ctx.fillStyle = '#404040';
+  ctx.fillStyle = '#404040'; // #0079a5 for admin posts
   ctx.fillRect(0, 0, 1080, 1080);
   ctx.font = '62px "SourceCodePro"';
   ctx.fillStyle = '#FFF';
@@ -106,7 +106,7 @@ function publish() {
       logPost(data);
       clearData();
   }
-} setInterval(publish, 4000);
+} setInterval(publish, 10000);
 
 publish();
 
