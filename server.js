@@ -1,6 +1,7 @@
 require('dotenv').config();
 var fs = require('fs');
 var express = require('express');
+var bodyParser = require('body-parser');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -16,6 +17,15 @@ const canvas = createCanvas(1080, 1080);
 const ctx = canvas.getContext('2d');
 
 app.use('/public', express.static('public'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.post("/submission", function(req, res) {
+  console.log("received " + req.body.anon);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  createImage(req.body.anon);
+  return res.redirect('/submitted');
+});
 
 function createImage(text) {
   var formatted = wrap(text, {indent: '', width: 28});
@@ -43,6 +53,21 @@ function createImage(text) {
       })
     }));
   fs.unlinkSync('./submission.png');
+}
+
+function publish(caption) {
+  Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
+    .then(function(session) {
+      Client.Upload.photo(session, './submission.jpeg')
+      .then(function(upload) {
+          console.log(upload.params.uploadId);
+          return Client.Media.configurePhoto(session, upload.params.uploadId, caption);
+      })
+      .then(function(medium) {
+        console.log(medium.params)
+      })
+    });
+    logPost(caption);
 }
 
 function logSubmission(ip) {
@@ -77,29 +102,6 @@ function logPost(text) {
     });
     }
   });
-}
-
-io.on('connection', function(socket) {
-  socket.on('submission', function(data) {
-    console.log("received " + data);
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    createImage(data);
-  });
-});
-
-function publish(caption) {
-  Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
-    .then(function(session) {
-      Client.Upload.photo(session, './submission.jpeg')
-      .then(function(upload) {
-          console.log(upload.params.uploadId);
-          return Client.Media.configurePhoto(session, upload.params.uploadId, caption);
-      })
-      .then(function(medium) {
-        console.log(medium.params)
-      })
-    });
-    logPost(caption);
 }
 
 function getClientIP(req){ // Anonbot logs IPs for safety & moderation

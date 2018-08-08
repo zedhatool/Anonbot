@@ -46,7 +46,7 @@
 
           <div class="inner cover">
             <h1 class="cover-heading">WL Anonbot</h1>
-            <form action="" id="f" class="f">
+            <form action="/submission" method="post" id="f" class="f">
               <textarea id="m" name="anon" type="text" cols="36" rows ="7" placeholder="Say something..." autofocus></textarea>
             </form>
             <p class="lead">
@@ -66,19 +66,6 @@
       </div>
 
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
-    <script>
-      var socket = io();
-      $("form").submit(function() {
-        socket.emit('submission', $("#m").val());
-        $("#m").val('');
-        window.location = "https://anonbotwl.glitch.me/submitted";
-        return false;
-      });
-    </script>
-
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
