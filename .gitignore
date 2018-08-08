@@ -4,5 +4,5 @@ cookies/bogdan.json
 cookies/anonbot.json
 *.jpeg
 submission.jpeg
-logs-posts.json
-logs-submissions.json
+logs-post.json
+logs-submission.json
