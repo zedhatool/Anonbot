@@ -15,6 +15,16 @@ registerFont('./fonts/SourceCodePro-Regular.ttf', {family: 'SourceCodePro'});
 const canvas = createCanvas(1080, 1080);
 const ctx = canvas.getContext('2d');
 
+var ref, urlSegmentToInstagramId;
+ref = require('instagram-id-to-url-segment');
+urlSegmentToInstagramId = ref.urlSegmentToInstagramId;
+
+function getShortcode(url) {
+  var parts = url.split('/');
+  console.log(parts[4]);
+  return parts[4];
+}
+
 app.use('/public', express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -23,6 +33,18 @@ app.post("/submission", function(req, res) {
   console.log("received " + req.body.anon);
   createImage(req.body.anon);
   return res.redirect('/submitted');
+});
+app.post("/delpost", function(req, res) {
+  console.log("received deletion request for " + req.body.link);
+  if (req.body.key === process.env.MOD_KEY) {
+    var shortcode = getShortcode(req.body.link);
+    delPost(urlSegmentToInstagramId(shortcode));
+    console.log("deletion successful");
+    return res.redirect(req.body.link);
+  } else {
+    console.log("request denied: incorrect mod key");
+    return res.redirect('/');
+  }
 });
 
 function createImage(text) {
@@ -42,12 +64,18 @@ function createImage(text) {
   pngToJpeg()(buffer)
     .then(output => fs.writeFile("./submission.jpeg", output, function(err) {
       if (err) console.log(err);
-
       fs.exists("./submission.jpeg", function(exists) {
         if (exists) publish(text);
       })
     }));
   fs.unlinkSync('./submission.png');
+}
+
+function delPost(id) {
+  Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
+  .then(function(session) {
+    return Client.Media.delete(session, ''+id);
+  })
 }
 
 function publish(caption) {
@@ -93,6 +121,9 @@ app.get("/", function(request, response) {
 app.get("/submitted", function(request, response) {
   log("submission", getClientIP(request));
   response.sendFile(__dirname + '/views/submitted.html');
+});
+app.get("/moderator", function(request, response) {
+  response.sendFile(__dirname + '/views/moderator.html');
 });
 
 http.listen(3000);
