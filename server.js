@@ -11,7 +11,7 @@ var device = new Client.Device('anonbot.wl');
 var storage = new Client.CookieFileStorage(__dirname + '/cookies/anonbot.json');
 const pngToJpeg = require('png-to-jpeg');
 const { createCanvas, loadImage, registerFont } = require('canvas');
-registerFont('./SourceCodePro-Regular.ttf', {family: 'SourceCodePro'});
+registerFont('./fonts/SourceCodePro-Regular.ttf', {family: 'SourceCodePro'});
 const canvas = createCanvas(1080, 1080);
 const ctx = canvas.getContext('2d');
 
@@ -92,11 +92,11 @@ function getClientIP(req){ // Anonbot logs IPs for safety & moderation
 }
 
 app.get("/", function(request, response) {
-  response.sendFile(__dirname + '/index.html');
+  response.sendFile(__dirname + '/views/index.html');
 });
 app.get("/submitted", function(request, response) {
   log("submission", getClientIP(request));
-  response.sendFile(__dirname + '/submitted.html');
+  response.sendFile(__dirname + '/views/submitted.html');
 });
 
 http.listen(3000);
