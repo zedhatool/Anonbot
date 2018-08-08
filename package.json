@@ -13,12 +13,9 @@
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "instagram-private-api": "^0.6.8",
-    "merge-images": "^1.1.0",
     "png-to-jpeg": "^1.0.1",
     "popper.js": "^1.14.3",
-    "request-ip": "^2.1.1",
     "sleep": "^5.1.1",
-    "socket.io": "^2.1.1",
     "word-wrap": "^1.2.3"
   },
   "engines": {
