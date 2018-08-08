@@ -41,14 +41,10 @@ function createImage(text) {
   let buffer = fs.readFileSync("./submission.png");
   pngToJpeg()(buffer)
     .then(output => fs.writeFile("./submission.jpeg", output, function(err) {
-      if (err) {
-        console.log(err);
-      }
+      if (err) console.log(err);
 
       fs.exists("./submission.jpeg", function(exists) {
-        if (exists) {
-          publish(text);
-        }
+        if (exists) publish(text);
       })
     }));
   fs.unlinkSync('./submission.png');
@@ -56,17 +52,17 @@ function createImage(text) {
 
 function publish(caption) {
   Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
-    .then(function(session) {
-      Client.Upload.photo(session, './submission.jpeg')
-      .then(function(upload) {
-          console.log(upload.params.uploadId);
-          return Client.Media.configurePhoto(session, upload.params.uploadId, caption);
-      })
-      .then(function(medium) {
-        console.log(medium.params)
-      })
-    });
-    log("post", caption);
+  .then(function(session) {
+    Client.Upload.photo(session, './submission.jpeg')
+    .then(function(upload) {
+      console.log(upload.params.uploadId);
+      return Client.Media.configurePhoto(session, upload.params.uploadId, caption);
+    })
+    .then(function(medium) {
+      console.log(medium.params)
+    })
+  });
+  log("post", caption);
 }
 
 function log(type, data) {
