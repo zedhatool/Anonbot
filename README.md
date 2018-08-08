@@ -1,5 +1,5 @@
 # Anonbotv2
-A bot for West Side students to submit confessions and annonce anonymously!
+A bot for West Side students to submit confessions and announce anonymously!
 
 # Rules
 Anonbot is moderated by a small team of dedicated students. They will remove any post that violates these rules, and they will IPban any user with repeated violations. The rules are very simple:
