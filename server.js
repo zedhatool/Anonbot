@@ -66,41 +66,27 @@ function publish(caption) {
         console.log(medium.params)
       })
     });
-    logPost(caption);
+    log("post", caption);
 }
 
-function logSubmission(ip) {
+function log(type, data) {
   var date = new Date();
 
-  fs.readFile('./logs-submissions.json', 'utf-8', function readFileCallback(err, data){
-    if (err){
-        console.log(err);
-    } else {
-    var obj = JSON.parse(data);
-    obj.submissionMade.push({hour: date, addr: ip});
-    var json = JSON.stringify(obj);
-    fs.writeFile('./logs-submissions.json', json, 'utf-8', function(err) {
-      if (err) {
-        console.log(err);
+  fs.readFile('./logs-'+type+'.json', 'utf-8', function(err, result) {
+    if (err) console.log(err);
+    else {
+      var obj = JSON.parse(result);
+      if (type === "submission") {
+        obj.submissionMade.push({hour: date, addr: data});
+      } else if (type === "post") {
+        obj.postMade.push({hour: date, post: data});
       }
-    });
-  }});
-}
-function logPost(text) {
-  var date = new Date();
-
-  fs.readFile('./logs-posts.json', 'utf-8', function readFileCallback(err, data) {
-    if (err) { console.log(err) } else {
-      var obj = JSON.parse(data);
-      obj.postMade.push({hour: date, post: text});
       var json = JSON.stringify(obj);
-      fs.writeFile('./logs-posts.json', json, 'utf-8', function(err) {
-      if (err) {
-        console.log(err);
-      }
-    });
+      fs.writeFile('./logs-'+type+'.json', json, 'utf-8', function(err) {
+        if (err) console.log(err);
+      })
     }
-  });
+  })
 }
 
 function getClientIP(req){ // Anonbot logs IPs for safety & moderation
@@ -111,7 +97,7 @@ app.get("/", function(request, response) {
   response.sendFile(__dirname + '/index.html');
 });
 app.get("/submitted", function(request, response) {
-  logSubmission(getClientIP(request));
+  log("submission", getClientIP(request));
   response.sendFile(__dirname + '/submitted.html');
 });
 
