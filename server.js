@@ -76,11 +76,9 @@ function log(type, data) {
     if (err) console.log(err);
     else {
       var obj = JSON.parse(result);
-      if (type === "submission") {
-        obj.submissionMade.push({hour: date, addr: data});
-      } else if (type === "post") {
-        obj.postMade.push({hour: date, post: data});
-      }
+      if (type === "submission") obj.submissionMade.push({hour: date, addr: data});
+      else if (type === "post") obj.postMade.push({hour: date, post: data});
+
       var json = JSON.stringify(obj);
       fs.writeFile('./logs-'+type+'.json', json, 'utf-8', function(err) {
         if (err) console.log(err);
