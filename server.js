@@ -21,12 +21,12 @@ app.use(bodyParser.json());
 
 app.post("/submission", function(req, res) {
   console.log("received " + req.body.anon);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
   createImage(req.body.anon);
   return res.redirect('/submitted');
 });
 
 function createImage(text) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   var formatted = wrap(text, {indent: '', width: 28});
   ctx.fillStyle = '#404040'; // #0079a5 for admin posts
   ctx.fillRect(0, 0, 1080, 1080);
