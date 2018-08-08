@@ -31,15 +31,18 @@ function createImage(text) {
   //convert to jpeg becuase api only currently support jpeg
   let buffer = fs.readFileSync("./submission.png");
   pngToJpeg()(buffer)
-    .then(output => fs.writeFileSync("./submission.jpeg", output));
-  fs.unlinkSync('./submission.png');
-}
+    .then(output => fs.writeFile("./submission.jpeg", output, function(err) {
+      if (err) {
+        console.log(err);
+      }
 
-function getData() {
-  return fs.readFileSync('./submission.txt', 'utf-8');
-}
-function clearData() {
-  fs.truncate('./submission.txt', 0, function(){console.log('submission file cleared')});
+      fs.exists("./submission.jpeg", function(exists) {
+        if (exists) {
+          publish(text);
+        }
+      })
+    }));
+  fs.unlinkSync('./submission.png');
 }
 
 function logSubmission(ip) {
@@ -79,36 +82,25 @@ function logPost(text) {
 io.on('connection', function(socket) {
   socket.on('submission', function(data) {
     console.log("received " + data);
-    clearData();
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     createImage(data);
-    fs.writeFile("./submission.txt", data, 'utf-8', function(err) {
-      if (err) { return console.log(err); }
-      console.log("submission saved");
-    });
   });
 });
 
-function publish() {
-  var data = getData();
-  if (data.length != 0) {
-    Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
-      .then(function(session) {
-        Client.Upload.photo(session, './submission.jpeg')
-          .then(function(upload) {
-              console.log(upload.params.uploadId);
-              return Client.Media.configurePhoto(session, upload.params.uploadId, data);
-          })
-          .then(function(medium) {
-              console.log(medium.params)
-          })
-      });
-      logPost(data);
-      clearData();
-  }
-} setInterval(publish, 10000);
-
-publish();
+function publish(caption) {
+  Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
+    .then(function(session) {
+      Client.Upload.photo(session, './submission.jpeg')
+      .then(function(upload) {
+          console.log(upload.params.uploadId);
+          return Client.Media.configurePhoto(session, upload.params.uploadId, caption);
+      })
+      .then(function(medium) {
+        console.log(medium.params)
+      })
+    });
+    logPost(caption);
+}
 
 function getClientIP(req){ // Anonbot logs IPs for safety & moderation
     return req.headers['x-forwarded-for'] || req.connection.remoteAddress;
