@@ -21,7 +21,6 @@ urlSegmentToInstagramId = ref.urlSegmentToInstagramId;
 
 function getShortcode(url) {
   var parts = url.split('/');
-  console.log(parts[4]);
   return parts[4];
 }
 
@@ -122,7 +121,7 @@ app.get("/submitted", function(request, response) {
   log("submission", getClientIP(request));
   response.sendFile(__dirname + '/views/submitted.html');
 });
-app.get("/moderator", function(request, response) {
+app.get("/delete", function(request, response) {
   response.sendFile(__dirname + '/views/moderator.html');
 });
 
