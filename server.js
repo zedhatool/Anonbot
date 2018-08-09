@@ -33,6 +33,13 @@ app.post("/submission", function(req, res) {
   createImage(req.body.anon, '#404040');
   return res.redirect('/submitted');
 });
+app.post("/comm", function(req, res) {
+  console.log("received comment " + req.body.comment);
+  var shortcode = getShortcode(req.body.url);
+  postComment(urlSegmentToInstagramId(shortcode), req.body.comment);
+  console.log("posted comment " + req.body.comment);
+  return res.redirect('/submitted');
+});
 app.post("/delpost", function(req, res) {
   console.log("received deletion request for " + req.body.link);
   if (req.body.key === process.env.MOD_KEY) {
@@ -101,6 +108,12 @@ function publish(caption) {
   });
   log("post", caption);
 }
+function postComment(id, comment) {
+  Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
+  .then(function(session) {
+    return Client.Comment.create(session, ''+id, comment);
+  })
+}
 
 function log(type, data) {
   var date = new Date();
@@ -136,6 +149,9 @@ app.get("/delete", function(request, response) {
 });
 app.get("/modpost", function(request, response) {
   response.sendFile(__dirname + '/views/modpost.html');
+});
+app.get("/comment", function(request, response) {
+  response.sendFile(__dirname + '/views/comment.html');
 });
 
 http.listen(3000);
