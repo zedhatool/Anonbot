@@ -122,7 +122,7 @@ app.get("/submitted", function(request, response) {
   response.sendFile(__dirname + '/views/submitted.html');
 });
 app.get("/delete", function(request, response) {
-  response.sendFile(__dirname + '/views/moderator.html');
+  response.sendFile(__dirname + '/views/delete.html');
 });
 
 http.listen(3000);
