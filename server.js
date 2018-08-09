@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 
 app.post("/submission", function(req, res) {
   console.log("received " + req.body.anon);
-  createImage(req.body.anon);
+  createImage(req.body.anon, '#404040');
   return res.redirect('/submitted');
 });
 app.post("/delpost", function(req, res) {
@@ -45,11 +45,21 @@ app.post("/delpost", function(req, res) {
     return res.redirect('/');
   }
 });
+app.post("/modpost", function(req, res) {
+  console.log("received mod post request " + req.body.mod);
+  if (req.body.key === process.env.MOD_KEY) {
+    createImage(req.body.mod, '#b20000');
+    return res.redirect('/submitted');
+  } else {
+    console.log("request denied: incorrect mod key");
+    return res.redirect('/');
+  }
+})
 
-function createImage(text) {
+function createImage(text, fillStyle) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   var formatted = wrap(text, {indent: '', width: 28});
-  ctx.fillStyle = '#404040'; // #0079a5 for admin posts
+  ctx.fillStyle = fillStyle;
   ctx.fillRect(0, 0, 1080, 1080);
   ctx.font = '62px "SourceCodePro"';
   ctx.fillStyle = '#FFF';
@@ -123,6 +133,9 @@ app.get("/submitted", function(request, response) {
 });
 app.get("/delete", function(request, response) {
   response.sendFile(__dirname + '/views/delete.html');
+});
+app.get("/modpost", function(request, response) {
+  response.sendFile(__dirname + '/views/moderator.html');
 });
 
 http.listen(3000);
