@@ -38,7 +38,7 @@ app.post("/comm", function(req, res) {
   var shortcode = getShortcode(req.body.url);
   postComment(urlSegmentToInstagramId(shortcode), req.body.comment);
   console.log("posted comment " + req.body.comment);
-  return res.redirect('/submitted');
+  return res.redirect('/commented');
 });
 app.post("/delpost", function(req, res) {
   console.log("received deletion request for " + req.body.link);
@@ -152,6 +152,9 @@ app.get("/modpost", function(request, response) {
 });
 app.get("/comment", function(request, response) {
   response.sendFile(__dirname + '/views/comment.html');
+});
+app.get("/commented", function(request, response) {
+  response.sendFile(__dirname + '/views/commented.html');
 });
 
 http.listen(3000);
