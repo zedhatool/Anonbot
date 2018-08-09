@@ -135,7 +135,7 @@ app.get("/delete", function(request, response) {
   response.sendFile(__dirname + '/views/delete.html');
 });
 app.get("/modpost", function(request, response) {
-  response.sendFile(__dirname + '/views/moderator.html');
+  response.sendFile(__dirname + '/views/modpost.html');
 });
 
 http.listen(3000);
