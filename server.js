@@ -7,7 +7,6 @@ var http = require('http').Server(app);
 var sleep = require('sleep');
 var rp = require('request-promise');
 var wrap = require('word-wrap');
-var validUrl = require('valid-url');
 var Client = require('instagram-private-api').V1;
 var device = new Client.Device('anonbot.wl');
 var storage = new Client.CookieFileStorage(__dirname + '/cookies/anonbot.json');
