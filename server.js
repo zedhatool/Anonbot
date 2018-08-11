@@ -4,7 +4,10 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var http = require('http').Server(app);
-var request = require('request');
+var sleep = require('sleep');
+//var request = require('request');
+var rp = require('request-promise');
+//var cheerio = require('cheerio');
 var wrap = require('word-wrap');
 var Client = require('instagram-private-api').V1;
 var device = new Client.Device('anonbot.wl');
@@ -24,10 +27,10 @@ function getShortcode(url) {
   return parts[4];
 }
 
-function isAnonbotPost(url) {
-  request({uri: url,}, function(error, response, body) {
-    return (body.includes("anonbot.wl"));
-  });
+function crawlWebpage(url) {
+  return rp(url).then(body => {
+    return body.includes("anonbot.wl");
+  })
 }
 
 app.use('/public', express.static('public'));
@@ -42,14 +45,16 @@ app.post("/submission", function(req, res) {
 app.post("/comm", function(req, res) {
   console.log("received comment " + req.body.comment + " on " + req.body.url);
   var shortcode = getShortcode(req.body.url);
-  if (isAnonbotPost(req.body.url)) {
-    postComment(urlSegmentToInstagramId(shortcode), req.body.comment);
-    console.log("posted comment " + req.body.comment);
-    return res.redirect('/commented');
-  } else {
-    console.log("comment not posted: post is not an Anonbot post");
-    return res.redirect('/');
-  }
+  crawlWebpage(req.body.url).then(result => {
+    if (result == true) {
+      postComment(urlSegmentToInstagramId(shortcode), req.body.comment);
+      console.log("posted comment " + req.body.comment);
+      return res.redirect('/commented');
+    } else {
+      console.log("comment not posted: post is not an Anonbot post");
+      return res.redirect('/');
+    }
+  })
 });
 app.post("/delpost", function(req, res) {
   console.log("received deletion request for " + req.body.link);
