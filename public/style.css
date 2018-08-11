@@ -180,9 +180,9 @@ body {
 }
 
 #snackbar {
-    visibility: hidden; 
-    min-width: 250px;
-    margin-left: -125px;
+    visibility: hidden;
+    min-width: 330px;
+    margin-left: -160px;
     background-color: #FFF;
     color: #333;
     text-align: center;
