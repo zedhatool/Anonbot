@@ -5,9 +5,7 @@ var bodyParser = require('body-parser');
 var app = express();
 var http = require('http').Server(app);
 var sleep = require('sleep');
-//var request = require('request');
 var rp = require('request-promise');
-//var cheerio = require('cheerio');
 var wrap = require('word-wrap');
 var Client = require('instagram-private-api').V1;
 var device = new Client.Device('anonbot.wl');
@@ -46,7 +44,7 @@ app.post("/comm", function(req, res) {
   console.log("received comment " + req.body.comment + " on " + req.body.url);
   var shortcode = getShortcode(req.body.url);
   crawlWebpage(req.body.url).then(result => {
-    if (result == true) {
+    if (result) {
       postComment(urlSegmentToInstagramId(shortcode), req.body.comment);
       console.log("posted comment " + req.body.comment);
       return res.redirect('/commented');
