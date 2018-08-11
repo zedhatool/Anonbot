@@ -30,6 +30,18 @@
             </p>
           </div>
 
+          <div id="snackbar">You can only comment on Anonbot posts!</div>
+          <script>
+            if (document.referrer === "http://localhost:3000/comment" || document.referrer === "https://anonbotwl.glitch.me/comment") {
+              showSnackbar();
+            }
+            function showSnackbar() {
+              var x = document.getElementById("snackbar");
+              x.className = "show";
+              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+            }
+          </script>
+
           <div class="mastfoot">
             <div class="inner">
               <p>Made with ❤ by the students of West Side</p>
