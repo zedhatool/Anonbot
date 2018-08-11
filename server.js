@@ -7,6 +7,7 @@ var http = require('http').Server(app);
 var sleep = require('sleep');
 var rp = require('request-promise');
 var wrap = require('word-wrap');
+var validUrl = require('valid-url');
 var Client = require('instagram-private-api').V1;
 var device = new Client.Device('anonbot.wl');
 var storage = new Client.CookieFileStorage(__dirname + '/cookies/anonbot.json');
@@ -27,7 +28,14 @@ function getShortcode(url) {
 
 function crawlWebpage(url) {
   return rp(url).then(body => {
-    return body.includes("anonbot.wl");
+    if (body.includes("anonbot.wl")) return true;
+    else {
+      console.log("comment not posted: post is not an Anonbot post");
+      return false;
+    }
+  })
+  .catch(function(err) {
+    console.log("Comment not posted: invalid URL");
   })
 }
 
@@ -49,7 +57,6 @@ app.post("/comm", function(req, res) {
       console.log("posted comment " + req.body.comment);
       return res.redirect('/commented');
     } else {
-      console.log("comment not posted: post is not an Anonbot post");
       return res.redirect('/');
     }
   })

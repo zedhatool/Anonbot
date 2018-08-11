@@ -19,6 +19,7 @@
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
     "sleep": "^5.1.1",
+    "valid-url": "^1.0.9",
     "word-wrap": "^1.2.3"
   },
   "engines": {
