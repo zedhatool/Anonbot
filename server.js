@@ -104,23 +104,16 @@ function createImage(text, fillStyle) {
   fs.unlinkSync('./submission.png');
 }
 
-function delPost(id) {
-  Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
-  .then(function(session) {
-    return Client.Media.delete(session, ''+id);
-  })
-}
-
 function publish(caption) {
   Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
   .then(function(session) {
     Client.Upload.photo(session, './submission.jpeg')
     .then(function(upload) {
-      console.log(upload.params.uploadId);
+      console.log("uploading...");
       return Client.Media.configurePhoto(session, upload.params.uploadId, caption);
     })
     .then(function(medium) {
-      console.log(medium.params)
+      console.log("photo uploaded at " + medium.params.webLink);
     })
   });
   log("post", caption);
@@ -129,6 +122,13 @@ function postComment(id, comment) {
   Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
   .then(function(session) {
     return Client.Comment.create(session, ''+id, comment);
+  })
+}
+
+function delPost(id) {
+  Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
+  .then(function(session) {
+    return Client.Media.delete(session, ''+id);
   })
 }
 
