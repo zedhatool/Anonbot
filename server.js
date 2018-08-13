@@ -5,7 +5,6 @@ var bodyParser = require('body-parser');
 var app = express();
 var http = require('http').Server(app);
 var sleep = require('sleep');
-var rp = require('request-promise');
 var wrap = require('word-wrap');
 var Client = require('instagram-private-api').V1;
 var device = new Client.Device('anonbot.wl');
@@ -25,19 +24,6 @@ function getShortcode(url) {
   return parts[4];
 }
 
-function crawlWebpage(url) {
-  return rp(url).then(body => {
-    if (body.includes("anonbot.wl")) return true;
-    else {
-      console.log("comment not posted: post is not an Anonbot post");
-      return false;
-    }
-  })
-  .catch(function(err) {
-    console.log("Comment not posted: invalid URL");
-  })
-}
-
 app.use('/public', express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -50,14 +36,25 @@ app.post("/submission", function(req, res) {
 app.post("/comm", function(req, res) {
   console.log("received comment " + req.body.comment + " on " + req.body.url);
   var shortcode = getShortcode(req.body.url);
-  crawlWebpage(req.body.url).then(result => {
-    if (result) {
-      postComment(urlSegmentToInstagramId(shortcode), req.body.comment);
-      console.log("posted comment " + req.body.comment);
-      return res.redirect('/commented');
-    } else {
-      return res.redirect('/');
-    }
+  Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
+  .then(function(session) {
+     return Client.Media.getByUrl(session, ''+req.body.url)
+     .then(function(data) {
+       if (data._params.user.username === "anonbot.wl") {
+         postComment(urlSegmentToInstagramId(shortcode), req.body.comment);
+         console.log("posted comment " + req.body.comment);
+         return res.redirect('/commented');
+       } else {
+         console.log("comment not posted: post is not an Anonbot post");
+         return res.redirect('/');
+       }
+     })
+     .catch(function(err) {
+       if (err) {
+         console.log("commment not posted: url is invalid");
+         return res.redirect('/');
+       }
+     })
   })
 });
 app.post("/delpost", function(req, res) {

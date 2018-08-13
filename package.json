@@ -16,8 +16,6 @@
     "instagram-private-api": "^0.6.8",
     "png-to-jpeg": "^1.0.1",
     "popper.js": "^1.14.3",
-    "request": "^2.87.0",
-    "request-promise": "^4.2.2",
     "sleep": "^5.1.1",
     "word-wrap": "^1.2.3"
   },
