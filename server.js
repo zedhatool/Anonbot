@@ -5,11 +5,13 @@ var bodyParser = require('body-parser');
 var app = express();
 var http = require('http').Server(app);
 var sleep = require('sleep');
-var wrap = require('word-wrap');
+var ref = require('instagram-id-to-url-segment');
+var urlSegmentToInstagramId = ref.urlSegmentToInstagramId;
 var Client = require('instagram-private-api').V1;
 var device = new Client.Device('anonbot.wl');
 var storage = new Client.CookieFileStorage(__dirname + '/cookies/anonbot.json');
 const pngToJpeg = require('png-to-jpeg');
+var wrap = require('word-wrap');
 const { createCanvas, loadImage, registerFont } = require('canvas');
 registerFont('./fonts/SourceCodePro-Regular.ttf', {family: 'SourceCodePro'});
 const canvas = createCanvas(1080, 1080);
@@ -89,9 +91,6 @@ function log(type, data) {
 function getClientIP(req){ // Anonbot logs IPs for safety & moderation
     return req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 }
-
-var ref = require('instagram-id-to-url-segment');
-var urlSegmentToInstagramId = ref.urlSegmentToInstagramId;
 
 function getShortcode(url) {
   var parts = url.split('/');
