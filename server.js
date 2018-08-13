@@ -130,6 +130,7 @@ app.post("/comm", function(req, res) {
      })
   })
 });
+
 app.post("/delpost", function(req, res) {
   console.log("received deletion request for " + req.body.link);
   if (req.body.key === process.env.MOD_KEY) {
