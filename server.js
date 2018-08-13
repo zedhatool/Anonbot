@@ -134,10 +134,10 @@ app.post("/comm", function(req, res) {
 app.post("/delpost", function(req, res) {
   console.log("received deletion request for " + req.body.link);
   if (req.body.key === process.env.MOD_KEY) {
-    var shortcode = getShortcode(req.body.link);
+    var shortcode = getShortcode(req.body.url);
     delPost(urlSegmentToInstagramId(shortcode));
     console.log("deletion successful");
-    return res.redirect(req.body.link);
+    return res.redirect(req.body.url);
   } else {
     console.log("request denied: incorrect mod key");
     return res.redirect('/');
