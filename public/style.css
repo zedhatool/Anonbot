@@ -58,6 +58,11 @@ button {
   width: 115px;
   height: 40px;
   background: white;
+  transition: 0.2s;
+}
+button:hover {
+  background: #878787;
+  transition: 0.2s;
 }
 
 @-webkit-keyframes AnimationName {
