@@ -19,5 +19,17 @@
     <a href="https://anonbotwl.glitch.me/comment"><p>Want to anonymously comment on a post instead?</p></a>
     <br/>
     <a href="https://github.com/MatthewStanciu/Anonbotv2" target="_blank"><p>View code on GitHub</p></a>
+
+    <div id="snackbar">You can only comment on Anonbot posts!</div>
+    <script>
+      if (document.referrer === "http://localhost:3000/comment" || document.referrer === "https://anonbotwl.glitch.me/comment") {
+        showSnackbar();
+      }
+      function showSnackbar() {
+        var x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+      }
+    </script>
   </body>
 </html>
