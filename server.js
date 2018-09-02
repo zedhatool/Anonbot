@@ -106,7 +106,7 @@ app.post("/submission", function(req, res) {
   createImage(req.body.anon, '#404040');
   return res.redirect('/submitted');
 });
-app.post("/comm", function(req, res) {
+app.post("/postcomment", function(req, res) {
   console.log("received comment " + req.body.comment + " on " + req.body.url);
   var shortcode = getShortcode(req.body.url);
   Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
