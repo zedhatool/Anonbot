@@ -2,58 +2,34 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>WL Anonbot</title>
-    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <title>Anonbot WL</title>
     <link href="../public/style.css" rel="stylesheet">
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
   </head>
   <body>
-    <div class="site-wrapper">
-      <div class="site-wrapper-inner">
-        <div class="cover-container">
+    <h1>Anonbot WL</h1>
+    <form action="/submission" method="post" id="f" class="f">
+      <textarea id="m" name="anon" type="text" cols="36" rows ="7" placeholder="Say something..." autofocus></textarea>
+    </form>
+    <button type="submit" form="f" class="btn btn-lg btn-default"><strong>Submit</strong></button>
+    <a href="https://anonbotwl.glitch.me/comment"><p>Want to anonymously comment on a post instead?</p></a>
+    <br/>
+    <a href="https://github.com/MatthewStanciu/Anonbotv2" target="_blank"><p>View code on GitHub</p></a>
 
-          <div class="inner cover">
-            <h1 class="cover-heading">WL Anonbot</h1>
-            <form action="/submission" method="post" id="f" class="f">
-              <textarea id="m" name="anon" type="text" cols="36" rows ="7" placeholder="Say something..." autofocus></textarea>
-            </form>
-            <p class="lead">
-              <button type="submit" form="f" class="btn btn-lg btn-default">Submit</button>
-              <a href="https://anonbotwl.glitch.me/comment"><p>Want to anonymously comment on a post instead?</p></a>
-            </p>
-          </div>
-
-          <div id="snackbar">You can only comment on Anonbot posts!</div>
-          <script>
-            if (document.referrer === "http://localhost:3000/comment" || document.referrer === "https://anonbotwl.glitch.me/comment") {
-              showSnackbar();
-            }
-            function showSnackbar() {
-              var x = document.getElementById("snackbar");
-              x.className = "show";
-              setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-            }
-          </script>
-
-          <div class="mastfoot">
-            <div class="inner">
-              <p>Made with ❤ by the students of West Side</p>
-              <a href="https://github.com/MatthewStanciu/Anonbotv2" target="_blank"><p>View on GitHub</p></a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <div id="snackbar">You can only comment on Anonbot posts!</div>
+    <script>
+      if (document.referrer === "http://localhost:3000/comment" || document.referrer === "https://anonbotwl.glitch.me/comment") {
+        showSnackbar();
+      }
+      function showSnackbar() {
+        var x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+      }
+    </script>
   </body>
 </html>
