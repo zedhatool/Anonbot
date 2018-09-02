@@ -103,6 +103,7 @@ app.use(bodyParser.json());
 
 app.post("/submission", function(req, res) {
   console.log("received " + req.body.anon);
+  if (req.body.anon === "") return res.redirect("/");
   createImage(req.body.anon, '#404040');
   return res.redirect('/submitted');
 });
