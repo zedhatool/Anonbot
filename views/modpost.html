@@ -4,40 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-    <title>WL Anonbot</title>
-    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <title>Anonbot WL</title>
     <link href="../public/style.css" rel="stylesheet">
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
   </head>
   <body>
-    <div class="site-wrapper">
-      <div class="site-wrapper-inner">
-        <div class="cover-container">
-
-          <div class="inner cover">
-            <h1 class="cover-heading">Post as a moderator</h1>
-            <form action="/modpost" method="post" id="d" class="f">
-              <textarea id="mod" name="mod" type="text" cols="36" rows ="7" placeholder="Say something as a moderator..." autofocus></textarea>
-              <input id="key" name="key" type="text" placeholder="Enter the mod key">
-            </form>
-            <p class="lead">
-              <button type="submit" form="d" class="btn btn-lg btn-default">Submit</button>
-            </p>
-          </div>
-          <div class="mastfoot">
-            <div class="inner">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <h2>Post as a moderator</h2>
+    <form action="/modpost" method="post" id="d" class="f">
+      <input id="key" name="key" type="text" placeholder="Enter the mod key">
+      <br/>
+      <textarea id="mod" name="mod" type="text" cols="36" rows ="7" placeholder="Say something as a moderator..." autofocus></textarea>
+    </form>
+    <p class="lead">
+      <button type="submit" form="d" class="btn btn-lg btn-default">Submit</button>
+    </p>
   </body>
 </html>
