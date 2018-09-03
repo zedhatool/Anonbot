@@ -5,3 +5,4 @@ cookies/anonbot.json
 *.jpeg
 submission.jpeg
 package-lock.json
+blacklist.txt

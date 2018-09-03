@@ -93,6 +93,18 @@ function getClientIP(req){ // Anonbot logs IPs for safety & moderation
   return ip[0];
 }
 
+function isBanned(address) {
+  var ips = (fs.readFileSync('./blacklist.txt', 'utf-8')).split(',');
+  for (var i = 0; i < ips.length; i++) {
+    if(ips[i] === address) {
+      console.log("User with IP " + address + " tried to access the site, but is banned!");
+      return true;
+    }
+
+    return false;
+  }
+}
+
 function getShortcode(url) {
   var parts = url.split('/');
   return parts[4];
@@ -157,7 +169,7 @@ app.post("/modpost", function(req, res) {
 })
 
 app.get("/", function(request, response) {
-  if (getClientIP(request) === "107.77.210.140") return response.redirect("/banned");
+  if (isBanned(getClientIP(request))) return response.redirect('/banned');
   response.sendFile(__dirname + '/views/index.html');
 });
 app.get("/submitted", function(request, response) {
@@ -171,7 +183,7 @@ app.get("/modpost", function(request, response) {
   response.sendFile(__dirname + '/views/modpost.html');
 });
 app.get("/comment", function(request, response) {
-  if (getClientIP(request) === "107.77.210.140") return response.redirect("/banned");
+  if (isBanned(getClientIP(request))) return response.redirect('/banned');
   response.sendFile(__dirname + '/views/comment.html');
 });
 app.get("/commented", function(request, response) {
