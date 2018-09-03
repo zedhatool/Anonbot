@@ -100,9 +100,9 @@ function isBanned(address) {
       console.log("User with IP " + address + " tried to access the site, but is banned!");
       return true;
     }
-
-    return false;
   }
+  
+  return false;
 }
 
 function getShortcode(url) {
