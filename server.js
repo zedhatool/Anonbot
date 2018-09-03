@@ -89,7 +89,8 @@ function log(type, data) {
 }
 
 function getClientIP(req){ // Anonbot logs IPs for safety & moderation
-    return req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress).split(',');
+  return ip[0];
 }
 
 function getShortcode(url) {
@@ -103,7 +104,7 @@ app.use(bodyParser.json());
 
 app.post("/submission", function(req, res) {
   console.log("received " + req.body.anon);
-  if (req.body.anon === "") return res.redirect("/");
+  if (req.body.anon === "") return res.redirect('/');
   createImage(req.body.anon, '#404040');
   return res.redirect('/submitted');
 });
@@ -156,6 +157,7 @@ app.post("/modpost", function(req, res) {
 })
 
 app.get("/", function(request, response) {
+  if (getClientIP(request) === "107.77.210.140") return response.redirect("/banned");
   response.sendFile(__dirname + '/views/index.html');
 });
 app.get("/submitted", function(request, response) {
@@ -169,10 +171,14 @@ app.get("/modpost", function(request, response) {
   response.sendFile(__dirname + '/views/modpost.html');
 });
 app.get("/comment", function(request, response) {
+  if (getClientIP(request) === "107.77.210.140") return response.redirect("/banned");
   response.sendFile(__dirname + '/views/comment.html');
 });
 app.get("/commented", function(request, response) {
   response.sendFile(__dirname + '/views/commented.html');
+});
+app.get("/banned", function(request, response) {
+  response.sendFile(__dirname + '/views/banned.html');
 });
 
 http.listen(3000);
