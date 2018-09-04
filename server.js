@@ -6,6 +6,7 @@ var app = express();
 var http = require('http').Server(app);
 var sleep = require('sleep');
 var ref = require('instagram-id-to-url-segment');
+let date = require('date-and-time');
 var urlSegmentToInstagramId = ref.urlSegmentToInstagramId;
 var Client = require('instagram-private-api').V1;
 var device = new Client.Device('anonbot.wl');
@@ -17,7 +18,7 @@ registerFont('./fonts/SourceCodePro-Regular.ttf', {family: 'SourceCodePro'});
 const canvas = createCanvas(1080, 1080);
 const ctx = canvas.getContext('2d');
 
-function createImage(text, fillStyle) {
+function createImage(text, fillStyle, ip) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   var formatted = wrap(text, {indent: '', width: 28});
   ctx.fillStyle = fillStyle;
@@ -35,13 +36,13 @@ function createImage(text, fillStyle) {
     .then(output => fs.writeFile("./submission.jpeg", output, function(err) {
       if (err) console.log(err);
       fs.exists("./submission.jpeg", function(exists) {
-        if (exists) publish(text);
+        if (exists) publish(text, ip);
       })
     }));
   fs.unlinkSync('./submission.png');
 }
 
-function publish(caption) {
+function publish(caption, ip) {
   Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
   .then(function(session) {
     Client.Upload.photo(session, './submission.jpeg')
@@ -51,9 +52,11 @@ function publish(caption) {
     })
     .then(function(medium) {
       console.log("photo uploaded at " + medium.params.webLink);
+      console.log(medium.params.takenAt);
     })
   });
-  log("post", caption);
+  log2(caption, ip);
+  //log("post", caption);
 }
 
 function postComment(id, comment) {
@@ -88,6 +91,21 @@ function log(type, data) {
   })
 }
 
+function log2(caption, ip) {
+  var now = new Date();
+  let formattedDate = date.format(now, 'YYYY/MM/DD HH:mm:ss');
+  fs.readFile('./logs.json', 'utf-8', function(err, data) {
+    if (err) return console.log(err);
+    var obj = JSON.parse(data);
+    obj.submission.push({hour: formattedDate, post: caption, ip: ip});
+
+    var json = JSON.stringify(obj);
+    fs.writeFile('./logs.json', json, 'utf-8', function(err) {
+      if (err) return console.log(err);
+    })
+  })
+}
+
 function getClientIP(req){ // Anonbot logs IPs for safety & moderation
   var ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress).split(',');
   return ip[0];
@@ -101,7 +119,7 @@ function isBanned(address) {
       return true;
     }
   }
-  
+
   return false;
 }
 
@@ -117,7 +135,7 @@ app.use(bodyParser.json());
 app.post("/submission", function(req, res) {
   console.log("received " + req.body.anon);
   if (req.body.anon === "") return res.redirect('/');
-  createImage(req.body.anon, '#404040');
+  createImage(req.body.anon, '#404040', getClientIP(req));
   return res.redirect('/submitted');
 });
 app.post("/postcomment", function(req, res) {
@@ -173,7 +191,6 @@ app.get("/", function(request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 app.get("/submitted", function(request, response) {
-  log("submission", getClientIP(request));
   response.sendFile(__dirname + '/views/submitted.html');
 });
 app.get("/delete", function(request, response) {
