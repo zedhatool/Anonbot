@@ -55,8 +55,7 @@ function publish(caption, ip) {
       console.log(medium.params.takenAt);
     })
   });
-  log2(caption, ip);
-  //log("post", caption);
+  log(caption, ip);
 }
 
 function postComment(id, comment) {
@@ -91,7 +90,7 @@ function log(type, data) {
   })
 }
 
-function log2(caption, ip) {
+function log(caption, ip) {
   var now = new Date();
   let formattedDate = date.format(now, 'YYYY/MM/DD HH:mm:ss');
   fs.readFile('./logs.json', 'utf-8', function(err, data) {
