@@ -77,7 +77,7 @@ function log(caption, ip) {
   fs.readFile('./logs.json', 'utf-8', function(err, data) {
     if (err) return console.log(err);
     var obj = JSON.parse(data);
-    obj.submission.push({hour: formattedDate, post: caption, ip: ip});
+    obj.submission.push({time: formattedDate, post: caption, ip: ip});
 
     var json = JSON.stringify(obj);
     fs.writeFile('./logs.json', json, 'utf-8', function(err) {
