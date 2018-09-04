@@ -52,7 +52,6 @@ function publish(caption, ip) {
     })
     .then(function(medium) {
       console.log("photo uploaded at " + medium.params.webLink);
-      console.log(medium.params.takenAt);
     })
   });
   log(caption, ip);
@@ -69,24 +68,6 @@ function delPost(id) {
   Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
   .then(function(session) {
     return Client.Media.delete(session, ''+id);
-  })
-}
-
-function log(type, data) {
-  var date = new Date();
-
-  fs.readFile('./logs-'+type+'.json', 'utf-8', function(err, result) {
-    if (err) console.log(err);
-    else {
-      var obj = JSON.parse(result);
-      if (type === "submission") obj.submissionMade.push({hour: date, addr: data});
-      else if (type === "post") obj.postMade.push({hour: date, post: data});
-
-      var json = JSON.stringify(obj);
-      fs.writeFile('./logs-'+type+'.json', json, 'utf-8', function(err) {
-        if (err) console.log(err);
-      })
-    }
   })
 }
 
