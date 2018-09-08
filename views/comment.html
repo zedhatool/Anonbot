@@ -18,6 +18,7 @@
       <br/>
       <textarea id="mod" name="comment" type="text" cols="36" rows ="7" placeholder="Comment something..." autofocus></textarea>
     </form>
-    <button type="submit" form="d"><strong>Submit</strong></button>
+    <button type="submit" form="d" onclick="this.disabled=true;this.value='Submitting...'; this.form.submit();">
+      <strong>Submit</strong></button>
   </body>
 </html>
