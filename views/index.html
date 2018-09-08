@@ -2,8 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport"
-    content="width=device-width, initial-scale=1 maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1.0, user-scalable=0">
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
@@ -13,11 +12,14 @@
   </head>
   <body>
     <h1>Anonbot WL</h1>
-    <form action="/submission" method="post" id="f" class="f">
-      <textarea id="m" name="anon" type="text" cols="36" rows ="7" placeholder="Say something..." autofocus></textarea>
-    </form>
-    <button type="submit" form="f" onclick="this.disabled=true;this.value='Submitting...'; this.form.submit();">
-      <strong>Submit</strong></button>
+    <div id="container" style="position: relative;">
+      <form action="/submission" method="post" id="f" class="f">
+        <textarea id="m" name="anon" type="text" cols="36" rows ="7" placeholder="Say something..." autofocus></textarea>
+        <div id="loader" style="position: absolute;"></div>
+      </form>
+      <button type="submit" form="f" onclick="this.disabled=true;this.value='Submitting...'; this.form.submit(); showLoader();">
+        <strong>Submit</strong></button>
+    </div>
     <a href="https://anonbotwl.glitch.me/comment"><p>Want to anonymously comment on a post instead?</p></a>
     <br/>
     <a href="https://github.com/MatthewStanciu/Anonbotv2" target="_blank"><p>View code on GitHub</p></a>
@@ -31,6 +33,11 @@
         var x = document.getElementById("snackbar");
         x.className = "show";
         setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+      }
+
+      function showLoader() {
+        var loader = documeht.getElementById("loader");
+        loader.className = "show";
       }
     </script>
   </body>
