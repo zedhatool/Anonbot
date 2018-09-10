@@ -30,7 +30,7 @@ function createImage(text, fillStyle, ip) {
   var buf = canvas.toBuffer();
   fs.writeFileSync("submission.png", buf);
 
-  //convert to jpeg becuase currently api only supports jpeg
+  //convert to jpeg because currently api only supports jpeg
   let buffer = fs.readFileSync("./submission.png");
   pngToJpeg()(buffer)
     .then(output => fs.writeFile("./submission.jpeg", output, function(err) {
