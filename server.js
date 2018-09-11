@@ -4,7 +4,6 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var http = require('http').Server(app);
-var sleep = require('sleep');
 var ref = require('instagram-id-to-url-segment');
 let date = require('date-and-time');
 var urlSegmentToInstagramId = ref.urlSegmentToInstagramId;
