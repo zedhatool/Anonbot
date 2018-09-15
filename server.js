@@ -20,8 +20,9 @@ const ctx = canvas.getContext('2d');
 function createImage(text, fillStyle, ip) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   var formatted = wrap(text, {indent: '', width: 28});
-  var truncated = formatted.length > 365 ? formatted.substr(0, 366) + "\u2026" : formatted;
+  var truncated = formatted.length > 355 ? formatted.substr(0, 356) + "\u2026" : formatted;
   ctx.fillStyle = fillStyle;
+  if (text.toLowerCase().indexOf("[serious]") != -1) ctx.fillStyle = '#7c7c7c';
   ctx.fillRect(0, 0, 1080, 1080);
   ctx.font = '62px "SourceCodePro"';
   ctx.fillStyle = '#FFF';
