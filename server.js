@@ -20,11 +20,12 @@ const ctx = canvas.getContext('2d');
 function createImage(text, fillStyle, ip) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   var formatted = wrap(text, {indent: '', width: 28});
+  var truncated = formatted.length > 365 ? formatted.substr(0, 366) + "\u2026" : formatted;
   ctx.fillStyle = fillStyle;
   ctx.fillRect(0, 0, 1080, 1080);
   ctx.font = '62px "SourceCodePro"';
   ctx.fillStyle = '#FFF';
-  ctx.fillText(formatted, 17, 65);
+  ctx.fillText(truncated, 17, 65);
 
   var buf = canvas.toBuffer();
   fs.writeFileSync("submission.png", buf);
