@@ -2,12 +2,25 @@
 A bot for West Side students to submit confessions and announce anonymously!
 
 # Rules
-Anonbot is moderated by a small team of dedicated students. They will remove any post that violates these rules, and they will IPban any user with repeated violations. The rules are very simple:
+We want Anonbot to be a fun experience for everyone, so generally we allow you to post whatever you want. However, there are a few things that you are not allowed to post. Breaking these rules will get your post deleted, and repeated offenses will get you IPbanned.
 
-1. Do not post anything that is against Instagram's policy (e.g. racial slurs)
-2. Do not use Anonbot to spam the Instagram page
+**1. Don't post anything that goes against Instagram's terms of use.** Use common sense here. Don't post anything that discriminates against a group of people (e.g. racist, sexist, homophobic, etc.), anything that can cause people harm (e.g. telling someone to kill themself), or anything illegal (e.g. killing prominent figures and politicians). Essentially, don't post anything that can get reported and taken down by Instagram, and please don't post anything that will get the police called to my house.
 
-If you use Anonbot safely and responsibly by following these two simple rules, you can create an enjoyable experience for everyone! Have fun!
+**2. Don't bully anyone.** In all honesty, making lighthearted fun of people is part of what makes Anonbot fun. But if it crosses the line into bullying, it crosses over into rule 1. Don't deliberately put any one person or group down. This is a little hard to define, so I'll let the Anonbot moderators use their own discretion. But you should be able to understand the difference between making jokes and bullying someone.
+
+**3. Don't spread false rumors.** This kind of goes along with rule 2. I wanted to give this point its own separate rule because I think it needs to be explicitly stated that this is not okay. Anonbot is not a place where you go to spread rumors about students at our school that could get them in trouble, both with other students and with the school administration. Imagine having your reputation ruined by a goddamn Instagram bot. That's incredibly stupid. Don't be a part of that.
+
+**4. Don't spam.** This is one of the most annoying rules to have to enforce. Basically, *don't spam.* Don't abuse the posting mechanism to post one thing after another very quickly. Spam should be self-explanatory. Spamming will likely get you IPbanned quicker than anything else here.
+
+**5. Don't excessively shitpost.** This kind of goes along with rule 4. Shitposting makes up a large part of Anonbot's posts, so it's okay to shitpost. It's part of what makes Anonbot fun. But please don't spam the Anonbot feed with stupid things like one-word posts or all-emoji posts. That's just annoying. Posting this kind of stuff probably won't get you banned (unless it crosses over to excessive spam territory), but it will probably get your post deleted. Just don't do it. You're not funny.
+
+**Reporting:** If you see a post that you feel is breaking one or more of these rules and should be removed, please don't report it to Instagram! That will put Anonbot as a whole at risk of being deleted. Instead, please DM the account and we will take it down.
+
+In order to enforce these rules, Anonbot temporarily logs IP addresses of everyone who posts something. We literally do not care at all what your IP is. We never look at the file your IPs are logged to, and we delete it every few days. Even if we wanted to use your IP to track you, we couldn't. See *Why do you log IPs?* and *I've heard of something like this before where the creators released personal info anyway. How can I be sure this is not the case with Anonbot?* in the **FAQ** section for more info.
+
+Anonbot has moderation tools that 5 moderators (including me) use to delete posts, make mod posts (posts with a red background), and IPban people who post things that warrant a ban. Please don't be the guy who turns on their VPN to keep spamming after we've already banned you. There are 5 of us. We will keep banning you until you give up. You have better things to do. Don't be an asshole.
+
+Finally, if you've been banned and you feel your ban is unjust, or you want to try to be unbanned after you've done something wrong, please don't be afraid to DM the Instagram account. We really don't care who you are; we just want to keep Anonbot safe and spam-free. So if you just talk to us, we will probably be more than happy to unban you.
 
 # FAQ
 **Q: Why do you log IPs?**\
