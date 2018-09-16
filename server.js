@@ -16,6 +16,8 @@ const { createCanvas, loadImage, registerFont } = require('canvas');
 registerFont('./fonts/SourceCodePro-Regular.ttf', {family: 'SourceCodePro'});
 const canvas = createCanvas(1080, 1080);
 const ctx = canvas.getContext('2d');
+var Airtable = require('airtable');
+var base = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appDowHJJVQTHNJfk');
 
 function createImage(text, fillStyle, ip) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -74,15 +76,13 @@ function delPost(id) {
 function log(caption, ip) {
   var now = new Date();
   let formattedDate = date.format(now, 'YYYY/MM/DD HH:mm:ss');
-  fs.readFile('./logs.json', 'utf-8', function(err, data) {
-    if (err) return console.log(err);
-    var obj = JSON.parse(data);
-    obj.submission.push({time: formattedDate, post: caption, ip: ip});
-
-    var json = JSON.stringify(obj);
-    fs.writeFile('./logs.json', json, 'utf-8', function(err) {
-      if (err) return console.log(err);
-    })
+  base('Anonbot Logs').create({
+    "Time": formattedDate,
+    "Post": caption,
+    "IP": ip
+  }, function(err, record) {
+    if (err) { console.error(err); return; }
+    console.log("new log created! " + record.getId());
   })
 }
 
