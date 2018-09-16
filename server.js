@@ -75,7 +75,11 @@ function delPost(id) {
 
 function log(caption, ip) {
   var now = new Date();
-  let formattedDate = date.format(now, 'YYYY/MM/DD HH:mm:ss');
+  // set to eastern time
+  now.setTime(now.getTime()+now.getTimezoneOffset()*60*1000);
+  var estDate = new Date(now.getTime() + -240*60*1000);
+  let formattedDate = date.format(estDate, 'YYYY/MM/DD HH:mm:ss');
+
   base('Anonbot Logs').create({
     "Time": formattedDate,
     "Post": caption,
