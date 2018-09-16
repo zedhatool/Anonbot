@@ -96,7 +96,7 @@ function getClientIP(req){ // Anonbot logs IPs for safety & moderation
   return ip[0];
 }
 
-var isBanned = function(address) {
+function determineIfBanned(address) {
   var banned = false;
   return new Promise(function(resolve, reject) {
     blacklist('Blacklist').select({
@@ -196,7 +196,7 @@ app.post("/banip", function(req, res) {
 })
 
 app.get("/", function(request, response) {
-  isBanned(getClientIP(request)).then(function(banned) {
+  determineIfBanned(getClientIP(request)).then(function(banned) {
     if (banned) return response.sendFile(__dirname + '/views/banned.html');
     else return response.sendFile(__dirname + '/views/index.html');
   })
@@ -211,7 +211,7 @@ app.get("/modpost", function(request, response) {
   response.sendFile(__dirname + '/views/modpost.html');
 });
 app.get("/comment", function(request, response) {
-  isBanned(getClientIP(request)).then(function(banned) {
+  determineIfBanned(getClientIP(request)).then(function(banned) {
     if (banned) return response.sendFile(__dirname + '/views/banned.html');
     else return response.sendFile(__dirname + '/views/comment.html');
   })
