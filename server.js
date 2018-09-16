@@ -222,5 +222,8 @@ app.get("/commented", function(request, response) {
 app.get("/ban", function(requrest, response) {
   response.sendFile(__dirname + '/views/ban.html');
 })
+app.get("/banned", function(request, response) {
+  response.sendFile(__dirname + '/views/banned.html');
+});
 
 http.listen(3000);
