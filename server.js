@@ -17,7 +17,8 @@ registerFont('./fonts/SourceCodePro-Regular.ttf', {family: 'SourceCodePro'});
 const canvas = createCanvas(1080, 1080);
 const ctx = canvas.getContext('2d');
 var Airtable = require('airtable');
-var base = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appDowHJJVQTHNJfk');
+var logs = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appDowHJJVQTHNJfk');
+var blacklist = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('applZHoMDx5uF9h1Z');
 
 function createImage(text, fillStyle, ip) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -80,7 +81,7 @@ function log(caption, ip) {
   var estDate = new Date(now.getTime() + -240*60*1000);
   let formattedDate = date.format(estDate, 'YYYY/MM/DD HH:mm:ss');
 
-  base('Anonbot Logs').create({
+  logs('Anonbot Logs').create({
     "Time": formattedDate,
     "Post": caption,
     "IP": ip
@@ -95,16 +96,24 @@ function getClientIP(req){ // Anonbot logs IPs for safety & moderation
   return ip[0];
 }
 
-function isBanned(address) {
-  var ips = (fs.readFileSync('./blacklist.txt', 'utf-8')).split(',');
-  for (var i = 0; i < ips.length; i++) {
-    if(ips[i] === address) {
-      console.log("User with IP " + address + " tried to access the site, but is banned!");
-      return true;
-    }
-  }
-
-  return false;
+var isBanned = function(address) {
+  var banned = false;
+  return new Promise(function(resolve, reject) {
+    blacklist('Blacklist').select({
+      view: "Grid view"
+    }).eachPage(function page(records, fetchNextPage) {
+      records.forEach(function(record) {
+        if (record.get('IP') === address) {
+          console.log("User with IP " + address + " tried to access the site, but is banned!");
+          banned = true;
+        }
+      })
+      fetchNextPage();
+    }, function done(err) {
+      if (err) reject(err);
+      resolve(banned);
+    })
+  })
 }
 
 function getShortcode(url) {
@@ -172,12 +181,13 @@ app.post("/modpost", function(req, res) {
 app.post("/banip", function(req, res) {
   console.log("receieved ban request for IP " + req.body.ip);
   if (req. body.key === process.env.MOD_KEY) {
-    fs.appendFile('./blacklist.txt', req.body.ip+',', function(err) {
-      if (err) return console.log(err);
-      else {
-        console.log(req.body.ip + " has been banned!");
-        return res.redirect('/banned');
-      }
+    blacklist('Blacklist').create({
+      "IP": req.body.ip,
+      "Reason": req.body.reason
+    }, function(err) {
+      if (err) { console.error(err); return; }
+      console.log("banned " + req.body.ip);
+      res.redirect('/banned');
     })
   } else {
     console.log("request denied: incorrect mod key");
@@ -186,8 +196,10 @@ app.post("/banip", function(req, res) {
 })
 
 app.get("/", function(request, response) {
-  if (isBanned(getClientIP(request))) return response.redirect('/banned');
-  response.sendFile(__dirname + '/views/index.html');
+  isBanned(getClientIP(request)).then(function(banned) {
+    if (banned) return response.sendFile(__dirname + '/views/banned.html');
+    else return response.sendFile(__dirname + '/views/index.html');
+  })
 });
 app.get("/submitted", function(request, response) {
   response.sendFile(__dirname + '/views/submitted.html');
@@ -199,8 +211,10 @@ app.get("/modpost", function(request, response) {
   response.sendFile(__dirname + '/views/modpost.html');
 });
 app.get("/comment", function(request, response) {
-  if (isBanned(getClientIP(request))) return response.redirect('/banned');
-  response.sendFile(__dirname + '/views/comment.html');
+  isBanned(getClientIP(request)).then(function(banned) {
+    if (banned) return response.sendFile(__dirname + '/views/banned.html');
+    else return response.sendFile(__dirname + '/views/comment.html');
+  })
 });
 app.get("/commented", function(request, response) {
   response.sendFile(__dirname + '/views/commented.html');
