@@ -165,6 +165,21 @@ app.post("/modpost", function(req, res) {
     return res.redirect('/');
   }
 })
+app.post("/banip", function(req, res) {
+  console.log("receieved ban request for IP " + req.body.ip);
+  if (req. body.key === process.env.MOD_KEY) {
+    fs.appendFile('./blacklist.txt', req.body.ip+',', function(err) {
+      if (err) return console.log(err);
+      else {
+        console.log(req.body.ip + " has been banned!");
+        return res.redirect('/banned');
+      }
+    })
+  } else {
+    console.log("request denied: incorrect mod key");
+    return res.redirect('/');
+  }
+})
 
 app.get("/", function(request, response) {
   if (isBanned(getClientIP(request))) return response.redirect('/banned');
@@ -186,6 +201,9 @@ app.get("/comment", function(request, response) {
 app.get("/commented", function(request, response) {
   response.sendFile(__dirname + '/views/commented.html');
 });
+app.get("/ban", function(requrest, response) {
+  response.sendFile(__dirname + '/views/ban.html');
+})
 app.get("/banned", function(request, response) {
   response.sendFile(__dirname + '/views/banned.html');
 });
