@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "airtable": "^0.5.6",
+    "bignumber-to-string": "^0.1.4",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.1.2",
     "canvas": "^2.0.0-alpha.12",
