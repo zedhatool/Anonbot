@@ -16,11 +16,10 @@ const { createCanvas, loadImage, registerFont } = require('canvas');
 registerFont('./fonts/SourceCodePro-Regular.ttf', {family: 'SourceCodePro'});
 const canvas = createCanvas(1080, 1080);
 const ctx = canvas.getContext('2d');
-const bigNumberToString = require('bignumber-to-string')
 var Airtable = require('airtable');
 var logs = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appDowHJJVQTHNJfk');
 var blacklist = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('applZHoMDx5uF9h1Z');
-var polls = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appODOZKGmd0j0QSR');
+var sha256 = require('crypto-js/sha256');
 
 function createImage(text, fillStyle, ip) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -65,35 +64,7 @@ function publish(caption, ip) {
 function postComment(id, comment) {
   Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
   .then(function(session) {
-    return Client.Comment.create(session, ''+id, comment)
-    .then(function(data) {
-      console.log("media id: " + bigNumberToString(data._params.mediaId));
-      console.log("comment id: " + bigNumberToString(data._params.id));
-      console.log("comment: " + data._params.text);
-      Client.Media.getById(session, id)
-      .then(function(post) {
-        var caption = post._params.caption;
-        //console.log("caption: " + post._params.caption);
-        if (caption.toLowercase.indexOf("[poll]") != -1) {
-          deleteComment(data._params.mediaId, data._params.id);
-          polls('Polls').select({
-            view: "Grid view"
-          }).eachPage(function page(records, fetchNextPage) {
-            records.forEach(function(record) {
-              console.log(record);
-            })
-          })
-        }
-      })
-    })
-  })
-}
-
-function deleteComment(mediaId, commentId) {
-  Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
-  .then(function(session) {
-    return Client.Comment.delete(session, mediaId, commentId);
-    // for testing: '1870734914146407015', '17981490862000798'
+    return Client.Comment.create(session, ''+id, comment);
   })
 }
 
@@ -114,7 +85,7 @@ function log(caption, ip) {
   logs('Anonbot Logs').create({
     "Time": formattedDate,
     "Post": caption,
-    "IP": ip
+    "IP Hash": ""+sha256(ip)
   }, function(err, record) {
     if (err) { console.error(err); return; }
     console.log("new log created! " + record.getId());
@@ -133,8 +104,8 @@ function determineIfBanned(address) {
       view: "Grid view"
     }).eachPage(function page(records, fetchNextPage) {
       records.forEach(function(record) {
-        if (record.get('IP') === address) {
-          console.log("User with IP " + address + " tried to access the site, but is banned!");
+        if (record.get('IP Hash') === ""+sha256(address)) {
+          console.log("A banned user tried to access the site!");
           banned = true;
         }
       })
@@ -176,7 +147,6 @@ app.post("/postcomment", function(req, res) {
          console.log("comment not posted: post is not an Anonbot post");
          return res.redirect('/');
        }
-       //console.log(data._params.caption);
      })
      .catch(function(err) {
        if (err) {
