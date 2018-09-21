@@ -19,6 +19,7 @@ const ctx = canvas.getContext('2d');
 var Airtable = require('airtable');
 var logs = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appDowHJJVQTHNJfk');
 var blacklist = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('applZHoMDx5uF9h1Z');
+var sha256 = require('crypto-js/sha256');
 
 function createImage(text, fillStyle, ip) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -84,7 +85,7 @@ function log(caption, ip) {
   logs('Anonbot Logs').create({
     "Time": formattedDate,
     "Post": caption,
-    "IP": ip
+    "IP Hash": ""+sha256(ip)
   }, function(err, record) {
     if (err) { console.error(err); return; }
     console.log("new log created! " + record.getId());
@@ -103,8 +104,8 @@ function determineIfBanned(address) {
       view: "Grid view"
     }).eachPage(function page(records, fetchNextPage) {
       records.forEach(function(record) {
-        if (record.get('IP') === address) {
-          console.log("User with IP " + address + " tried to access the site, but is banned!");
+        if (record.get('IP Hash') === ""+sha256(address)) {
+          console.log("A banned user tried to access the site!");
           banned = true;
         }
       })

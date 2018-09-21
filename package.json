@@ -8,9 +8,11 @@
   },
   "dependencies": {
     "airtable": "^0.5.6",
+    "bignumber-to-string": "^0.1.4",
     "body-parser": "^1.18.3",
     "bootstrap": "^4.1.2",
     "canvas": "^2.0.0-alpha.12",
+    "crypto-js": "^3.1.9-1",
     "date-and-time": "^0.6.2",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
