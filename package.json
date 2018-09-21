@@ -1,7 +1,7 @@
 {
   "name": "anonbotv2",
-  "version": "1.0.0",
-  "description": "A better West Lafayette Anonbot",
+  "version": "2.0.0",
+  "description": "A bot for West Side students to submit confessions and announce anonymously",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
