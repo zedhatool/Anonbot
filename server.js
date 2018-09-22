@@ -19,6 +19,7 @@ const ctx = canvas.getContext('2d');
 var Airtable = require('airtable');
 var logs = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appDowHJJVQTHNJfk');
 var blacklist = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('applZHoMDx5uF9h1Z');
+var timelist = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appvyiK1f30WQ6MSK')
 var sha256 = require('crypto-js/sha256');
 
 function createImage(text, fillStyle, ip) {
