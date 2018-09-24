@@ -242,7 +242,7 @@ app.post("/modpost", function(req, res) {
   }
 })
 app.post("/banip", function(req, res) {
-  console.log("receieved ban request for IP " + req.body.ip);
+  console.log("received ban request for IP " + req.body.ip);
   if (req. body.key === process.env.MOD_KEY) {
     blacklist('Blacklist').create({
       "IP": req.body.ip,
