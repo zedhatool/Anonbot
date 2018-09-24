@@ -4,6 +4,7 @@ cookies/bogdan.json
 cookies/anonbot.json
 *.jpeg
 submission.jpeg
+response.jpeg
 package-lock.json
 blacklist.txt
 logs.json

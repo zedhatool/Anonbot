@@ -21,7 +21,7 @@ var logs = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appDowHJJV
 var blacklist = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('applZHoMDx5uF9h1Z');
 var sha256 = require('crypto-js/sha256');
 
-function createImage(text, fillStyle, ip) {
+function createSubmission(text, fillStyle, ip, isResponse, responseText) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   var formatted = wrap(text, {indent: '', width: 28});
   var truncated = formatted.length > 355 ? formatted.substr(0, 356) + "\u2026" : formatted;
@@ -37,27 +37,75 @@ function createImage(text, fillStyle, ip) {
   //convert to jpeg because currently api only supports jpeg
   let buffer = fs.readFileSync("./submission.png");
   pngToJpeg()(buffer)
-    .then(output => fs.writeFile("./submission.jpeg", output, function(err) {
-      if (err) console.log(err);
-      fs.exists("./submission.jpeg", function(exists) {
-        if (exists) publish(text, ip);
-      })
-    }));
+  .then(output => fs.writeFile("./submission.jpeg", output, function(err) {
+    if (err) console.log(err);
+    fs.exists("./submission.jpeg", function(exists) {
+      if (exists && isResponse) publish(responseText, ip, isResponse);
+      else if (exists && !isResponse) publish(text, ip, isResponse);
+    })
+  }));
   fs.unlinkSync('./submission.png');
 }
+function createResponse(text, originalText, ip) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  var formatted = wrap(text, {indent: '', width: 28});
+  var truncated = formatted.length > 355 ? formatted.substr(0, 356) + "\u2026" : formatted;
+  ctx.fillStyle = "#FFF";
+  ctx.fillRect(0, 0, 1080, 1080);
+  ctx.font = '62px "SourceCodePro"';
+  ctx.fillStyle = '#000';
+  ctx.fillText(truncated, 17, 65);
 
-function publish(caption, ip) {
-  Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
-  .then(function(session) {
-    Client.Upload.photo(session, './submission.jpeg')
-    .then(function(upload) {
-      console.log("uploading...");
-      return Client.Media.configurePhoto(session, upload.params.uploadId, caption);
+  var buf = canvas.toBuffer();
+  fs.writeFileSync("response.png", buf);
+
+  let buffer = fs.readFileSync("./response.png");
+  pngToJpeg()(buffer)
+  .then(output => fs.writeFile("./response.jpeg", output, function(err) {
+    if (err) console.log(err);
+    fs.exists("./response.jpeg", function(exists) {
+      if (exists) createSubmission(originalText, '#404040', ip, true, text);
     })
-    .then(function(medium) {
-      console.log("photo uploaded at " + medium.params.webLink);
+  }));
+  fs.unlinkSync('./response.png');
+}
+
+function publish(caption, ip, isResponse) {
+  if (isResponse) {
+    var photos = [
+      {
+        type: 'photo',
+        size: [1000,1000],
+        data: './response.jpeg'
+      },
+      {
+        type: 'photo',
+        size: [1000,1000],
+        data: './submission.jpeg'
+      }
+    ], disabledComments = false;
+    Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
+    .then(function(session) {
+      Client.Upload.album(session, photos)
+      .then(function(payload) {
+        console.log("Uploaded new response!");
+        Client.Media.configureAlbum(session, payload, caption, disabledComments)
+      })
     })
-  });
+  }
+  else {
+    Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
+    .then(function(session) {
+      Client.Upload.photo(session, './submission.jpeg')
+      .then(function(upload) {
+        console.log("uploading...");
+        return Client.Media.configurePhoto(session, upload.params.uploadId, caption);
+      })
+      .then(function(medium) {
+        console.log("photo uploaded at " + medium.params.webLink);
+      })
+    });
+  }
   log(caption, ip);
 }
 
@@ -65,6 +113,16 @@ function postComment(id, comment) {
   Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
   .then(function(session) {
     return Client.Comment.create(session, ''+id, comment);
+  })
+}
+
+function postReponse(url, comment, ip) {
+  Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
+  .then(function(session) {
+    return Client.Media.getByUrl(session, url)
+    .then(function(data) {
+      createResponse(comment, data._params.caption, ip);
+    })
   })
 }
 
@@ -129,18 +187,22 @@ app.use(bodyParser.json());
 app.post("/submission", function(req, res) {
   console.log("received " + req.body.anon);
   if (req.body.anon === "") return res.redirect('/');
-  createImage(req.body.anon, '#404040', getClientIP(req));
+  createSubmission(req.body.anon, '#404040', getClientIP(req), false);
   return res.redirect('/submitted');
 });
 app.post("/postcomment", function(req, res) {
-  console.log("received comment " + req.body.comment + " on " + req.body.url);
+  var commentString = req.body.comment.split('::');
+  var comment = commentString[0];
+  var commentType = commentString[1];
+  console.log("received comment " + comment + " type " + commentType + " on " + req.body.url);
   var shortcode = getShortcode(req.body.url);
   Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
   .then(function(session) {
      return Client.Media.getByUrl(session, ''+req.body.url)
      .then(function(data) {
        if (data._params.user.username === "anonbot.wl") {
-         postComment(urlSegmentToInstagramId(shortcode), req.body.comment);
+         if (commentType === "comment") postComment(urlSegmentToInstagramId(shortcode), comment);
+         else postReponse(req.body.url, comment);
          console.log("posted comment " + req.body.comment);
          return res.redirect('/commented');
        } else {
@@ -172,7 +234,7 @@ app.post("/delpost", function(req, res) {
 app.post("/modpost", function(req, res) {
   console.log("received mod post request " + req.body.mod);
   if (req.body.key === process.env.MOD_KEY) {
-    createImage(req.body.mod, '#b20000');
+    createSubmission(req.body.mod, '#b20000', false);
     return res.redirect('/submitted');
   } else {
     console.log("request denied: incorrect mod key");
@@ -211,10 +273,10 @@ app.get("/delete", function(request, response) {
 app.get("/modpost", function(request, response) {
   response.sendFile(__dirname + '/views/modpost.html');
 });
-app.get("/comment", function(request, response) {
+app.get("/respond", function(request, response) {
   determineIfBanned(getClientIP(request)).then(function(banned) {
     if (banned) return response.sendFile(__dirname + '/views/banned.html');
-    else return response.sendFile(__dirname + '/views/comment.html');
+    else return response.sendFile(__dirname + '/views/respond.html');
   })
 });
 app.get("/commented", function(request, response) {

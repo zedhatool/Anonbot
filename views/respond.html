@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1 maximum-scale=1.0, user-scalable=0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Anonbot WL</title>
+    <link href="../public/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <h2 class="cover-heading">Respond to a post</h2>
+    <form action="/postcomment" method="post" id="d" class="f">
+      <input id="key" name="url" type="text" placeholder="Enter the post url">
+      <br/>
+      <textarea id="comment" name="comment" type="text" cols="36" rows ="7" placeholder="Comment something..." autofocus></textarea>
+    </form>
+    <button type="submit" id="comm" form="d" onclick="this.disabled=true;postAs('comment')">
+      <strong>Submit as comment</strong></button>
+    <button type="submit" id="respond" form="d" onclick="this.disabled=true;postAs('response')">
+      <strong>Submit as response</strong></button>
+      <script>
+        function postAs(type) {
+          var text = document.getElementById('comment');
+          text.value = text.value + '::'+type;
+          this.form.submit();
+        }
+      </script>
+  </body>
+</html>
