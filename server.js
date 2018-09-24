@@ -202,7 +202,7 @@ app.post("/postcomment", function(req, res) {
      .then(function(data) {
        if (data._params.user.username === "anonbot.wl") {
          if (commentType === "comment") postComment(urlSegmentToInstagramId(shortcode), comment);
-         else postReponse(req.body.url, comment);
+         else postReponse(req.body.url, comment, getClientIP(req));
          console.log("posted comment " + comment);
          return res.redirect('/commented');
        } else {
