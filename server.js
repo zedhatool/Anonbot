@@ -186,7 +186,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.post("/submission", function(req, res) {
-  console.log("received " + req.body.anon);
+  console.log("received submission" + req.body.anon);
   if (req.body.anon === "") return res.redirect('/');
   createSubmission(req.body.anon, '#404040', getClientIP(req), false);
   return res.redirect('/submitted');
