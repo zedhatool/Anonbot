@@ -282,7 +282,7 @@ app.get("/respond", function(request, response) {
 app.get("/commented", function(request, response) {
   response.sendFile(__dirname + '/views/commented.html');
 });
-app.get("/ban", function(requrest, response) {
+app.get("/ban", function(request, response) {
   response.sendFile(__dirname + '/views/ban.html');
 })
 app.get("/banned", function(request, response) {
