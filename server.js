@@ -50,7 +50,7 @@ function createResponse(text, originalText, ip) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   var formatted = wrap(text, {indent: '', width: 28});
   var truncated = formatted.length > 355 ? formatted.substr(0, 356) + "\u2026" : formatted;
-  ctx.fillStyle = "#FFF";
+  ctx.fillStyle = "#c6c6c6";
   ctx.fillRect(0, 0, 1080, 1080);
   ctx.font = '62px "SourceCodePro"';
   ctx.fillStyle = '#000';
