@@ -201,7 +201,7 @@ app.post("/postcomment", function(req, res) {
      return Client.Media.getByUrl(session, ''+req.body.url)
      .then(function(data) {
        if (data._params.user.username === "anonbot.wl") {
-         if (commentType === "comment") postComment(urlSegmentToInstagramId(shortcode), comment);
+         if (commentType === "comm") postComment(urlSegmentToInstagramId(shortcode), comment);
          else postReponse(req.body.url, comment, getClientIP(req));
          console.log("posted comment " + comment);
          return res.redirect('/commented');
