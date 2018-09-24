@@ -112,6 +112,7 @@ function publish(caption, ip, isResponse) {
 function postComment(id, comment) {
   Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
   .then(function(session) {
+    console.log("posted comment " + comment);
     return Client.Comment.create(session, ''+id, comment);
   })
 }
@@ -203,7 +204,6 @@ app.post("/postcomment", function(req, res) {
        if (data._params.user.username === "anonbot.wl") {
          if (commentType === "comm") postComment(urlSegmentToInstagramId(shortcode), comment);
          else postReponse(req.body.url, comment, getClientIP(req));
-         console.log("posted comment " + comment);
          return res.redirect('/commented');
        } else {
          console.log("comment not posted: post is not an Anonbot post");
