@@ -64,7 +64,7 @@ function createResponse(text, originalText, ip) {
   .then(output => fs.writeFile("./response.jpeg", output, function(err) {
     if (err) console.log(err);
     fs.exists("./response.jpeg", function(exists) {
-      if (exists) createSubmission(originalText, '#404040', ip, true, text);
+      if (exists) createSubmission(originalText, '#404040', ip, true, text + " [" + originalText + "]");
     })
   }));
   fs.unlinkSync('./response.png');
