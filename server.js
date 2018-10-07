@@ -19,6 +19,8 @@ const ctx = canvas.getContext('2d');
 var Airtable = require('airtable');
 var logs = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appDowHJJVQTHNJfk');
 var blacklist = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('applZHoMDx5uF9h1Z');
+var timelimit = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appkMxjES4KoVS3Gx');
+const MAX_POSTS_BY_IP = 5;
 var sha256 = require('crypto-js/sha256');
 
 function createSubmission(text, fillStyle, ip, isResponse, responseText) {
@@ -148,7 +150,60 @@ function log(caption, ip) {
   }, function(err, record) {
     if (err) { console.error(err); return; }
     console.log("new log created! " + record.getId());
-  })
+    logPostCount(ip);
+  });
+}
+
+function logPostCount(ip) {
+  timelimit('Time Limit').select({
+    filterByFormula: `{IP Hash} = "${sha256(ip)}"`,
+    view: "Grid view"
+  }).firstPage(function page(err,records) {
+    if(err) {console.error(err); return;}
+    if(records.length == 0) { createPostCount(ip); return; }
+    records.forEach(record => updatePostCounter(record));
+  });
+}
+
+function createPostCount(ip) {
+  timelimit('Time Limit').create({
+    'IP Hash': ""+sha256(ip),
+    'Post Count': 1
+  }, (err, record) => {
+    if (err) { console.error(err); return; }
+    console.debug(`${record.get('IP Hash')} posted ${record.get('Post Count')} time`);
+  });
+}
+
+function updatePostCounter(record) {
+  let newPostCount = record.get('Post Count') + 1;
+  timelimit('Time Limit').update(record.getId(), {
+    "Post Count": newPostCount
+  }, function(err, record) {
+      if (err) { console.error(err); return; }
+      console.log(`${record.get('IP Hash')} posted ${newPostCount} times`);
+  });
+}
+
+function hasReachPostLimit(request) {
+  var reached = false;
+  let ip = getClientIP(request);
+  return new Promise(function(resolve, reject) {
+    timelimit('Time Limit').select({
+      filterByFormula: `{IP Hash} = "${sha256(ip)}"`,
+      maxRecords: 1,
+      view: "Grid view"
+    }).firstPage((err, records) => {
+      if(err) reject(err);
+      records.forEach(function(record) {
+        if (record.get('Post Count') >= MAX_POSTS_BY_IP) {
+          console.debug(`${record.get('IP Hash')} reached the post limit of ${MAX_POSTS_BY_IP} posts`);
+          reached = true;
+        } 
+      });
+      resolve(reached);
+    });
+  });
 }
 
 function getClientIP(req){ // Anonbot logs IPs for safety & moderation
@@ -260,9 +315,12 @@ app.post("/banip", function(req, res) {
 
 app.get("/", function(request, response) {
   determineIfBanned(getClientIP(request)).then(function(banned) {
-    if (banned) return response.sendFile(__dirname + '/views/banned.html');
-    else return response.sendFile(__dirname + '/views/index.html');
-  })
+    hasReachPostLimit(request).then(function(reached) {
+      if (banned) return response.sendFile(__dirname + '/views/banned.html');
+      if (reached) return response.sendFile(__dirname + '/views/limit.html');
+      return response.sendFile(__dirname + '/views/index.html');
+    }).catch(err => { console.error(err); return;});
+  }).catch( err => {console.error(err); return;});
 });
 app.get("/submitted", function(request, response) {
   response.sendFile(__dirname + '/views/submitted.html');
