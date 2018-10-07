@@ -19,7 +19,7 @@ const ctx = canvas.getContext('2d');
 var Airtable = require('airtable');
 var logs = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appDowHJJVQTHNJfk');
 var blacklist = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('applZHoMDx5uF9h1Z');
-var timelimit = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appkMxjES4KoVS3Gx');
+var timelimit = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appvyiK1f30WQ6MSK');
 const MAX_POSTS_BY_IP = 5;
 var sha256 = require('crypto-js/sha256');
 
@@ -199,7 +199,7 @@ function hasReachPostLimit(request) {
         if (record.get('Post Count') >= MAX_POSTS_BY_IP) {
           console.debug(`${record.get('IP Hash')} reached the post limit of ${MAX_POSTS_BY_IP} posts`);
           reached = true;
-        } 
+        }
       });
       resolve(reached);
     });
