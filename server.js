@@ -21,6 +21,8 @@ var logs = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appDowHJJV
 var blacklist = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('applZHoMDx5uF9h1Z');
 var sha256 = require('crypto-js/sha256');
 
+function getOPost
+
 function createSubmission(text, fillStyle, ip, isResponse, responseText) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   var formatted = wrap(text, {indent: '', width: 28});
