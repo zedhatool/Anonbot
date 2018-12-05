@@ -36,7 +36,7 @@ A: If you see a post that you believe to be inappropriate, please do not report 
 A: Anonbot was first created on June 20th, 2018, and v2 was first implemented on July 14th, 2018. Because Anonbot was created during the summer, the school administration does not know about it (see the dislcaimers section). We do not believe Anonbot is breaking any school rules, but if any conflicts arise in the future, we will comply fully.
 
 # Disclaimers
-For moderation purposes, every submission, as well as the IP address of the submitter, is logged for 10 days. We do not use your IPs for any purpose other than to IPban those who break the rules repeatedly. This should not affect you as long as you use Anonbot properly.
+For moderation purposes, every submission, as well as a hash of the IP address of the submitter, is logged for 10 days. We do not use the hash of your IPs for any purpose other than to ban those who break the rules repeatedly. Furthermore, the hashes are irreversible and cannot be tracked back to the original IP. This should not affect you as long as you use Anonbot properly.
 
 Anonbot is not endorsed by or affiliated with the West Lafayette High School in any way. This is simply a small and fun project created by West Side students who want to submit confessions and announce things anonymously.
 
