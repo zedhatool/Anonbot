@@ -1,0 +1,95 @@
+@-webkit-keyframes backgroundGradient {
+   0%{background-position:0% 50%}
+   50%{background-position:100% 50%}
+   100%{background-position:0% 50%}
+}
+@-moz-keyframes backgroundGradient {
+   0%{background-position:0% 50%}
+   50%{background-position:100% 50%}
+   100%{background-position:0% 50%}
+}
+@keyframes backgroundGradient {
+   0%{background-position:0% 50%}
+   50%{background-position:100% 50%}
+   100%{background-position:0% 50%}
+}
+
+html {
+  font-family: 'SourceCodePro';
+  font-size: 35px;
+  color: white;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display:table;
+}
+
+body {
+  display: table-cell;
+  vertical-align:middle;
+  background: linear-gradient(-45deg, #7a0000, #606060, #151515);
+  background-size: 400% 400%;
+
+  -webkit-animation: backgroundGradient 30s ease infinite;
+  -moz-animation: backgroundGradient 30s ease infinite;
+  animation: backgroundGradient 30s ease infinite;
+}
+
+@font-face {
+  font-family: 'SourceCodePro';
+  src: url('https://cdn.glitch.com/3269c758-900f-4003-a9b7-a3d1b265644c%2FSourceCodePro-Regular.ttf?1535915943477');
+}
+@font-face {
+  font-family: 'SourceCodeProBold';
+  src: url('https://cdn.glitch.com/3269c758-900f-4003-a9b7-a3d1b265644c%2FSourceCodePro-Bold.ttf?1535920143884');
+}
+
+h1 {
+  margin-top: 20pt;
+}
+h1, h2, h3, h4 {
+  // font-family: 'SourceCodeProBold';
+  font-weight: 500;
+}
+p {
+  font-size: 15px;
+  color: #FFF;
+}
+a {
+  color: #FFF;
+}
+textarea {
+  border-radius: 25px;
+  border: 2px solid #191414;
+  padding: 15px;
+  width: 320px;
+  height: 125px;
+  font-family: 'SourceCodePro';
+}
+textarea:focus {
+  outline: none;
+}
+input {
+  border-radius: 25px;
+  border: 2px solid #191414;
+  padding: 15px;
+  width: 200px;
+  height: 5px;
+  font-family: 'SourceCodePro';
+}
+button {
+  border-radius: 20px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  border: 2px solid #191414;
+  width: 115px;
+  height: 40px;
+  background: white;
+  transition: 0.2s;
+}
+button:hover {
+  background: #878787;
+  transition: 0.2s;
+}
