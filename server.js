@@ -46,14 +46,16 @@ function createSubmission(text, fillStyle, ip, isResponse, responseText, color) 
   }));
   fs.unlinkSync('./submission.png');
 }
-function createResponse(text, originalText, ip) {
+function createResponse(text, originalText, ip, color) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   var formatted = wrap(text, {indent: '', width: 28});
   var truncated = formatted.length > 355 ? formatted.substr(0, 356) + "\u2026" : formatted;
-  ctx.fillStyle = "#c6c6c6";
+  if (color === "red") ctx.fillStyle = "#165B33";
+  else ctx.fillStyle = "#BB2528";
+  //ctx.fillStyle = "#c6c6c6";
   ctx.fillRect(0, 0, 1080, 1080);
   ctx.font = '62px "SourceCodePro"';
-  ctx.fillStyle = '#000';
+  ctx.fillStyle = '#FFF';
   ctx.fillText(truncated, 17, 65);
 
   var buf = canvas.toBuffer();
@@ -64,7 +66,11 @@ function createResponse(text, originalText, ip) {
   .then(output => fs.writeFile("./response.jpeg", output, function(err) {
     if (err) console.log(err);
     fs.exists("./response.jpeg", function(exists) {
-      if (exists) createSubmission(originalText, '#404040', ip, true, text + "\n---\n" + originalText);
+      if (exists) {
+        console.log(color);
+        if (color === "green") createSubmission(originalText, '#165B33', ip, true, text + "\n---\n" + originalText, "red");
+        else createSubmission(originalText, '#BB2528', ip, true, text + "\n---\n" + originalText, "green");
+      }
     })
   }));
   fs.unlinkSync('./response.png');
@@ -123,7 +129,9 @@ function postReponse(url, comment, ip) {
   .then(function(session) {
     return Client.Media.getByUrl(session, url)
     .then(function(data) {
-      createResponse(comment, data._params.caption, ip);
+      getLastColor().then(function(color) {
+        createResponse(comment, data._params.caption, ip, color);
+      })
     })
   })
 }
