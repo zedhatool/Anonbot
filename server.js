@@ -21,7 +21,7 @@ var logs = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('appDowHJJV
 var blacklist = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base('applZHoMDx5uF9h1Z');
 var sha256 = require('crypto-js/sha256');
 
-function createSubmission(text, fillStyle, ip, isResponse, responseText) {
+function createSubmission(text, fillStyle, ip, isResponse, responseText, color) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   var formatted = wrap(text, {indent: '', width: 28});
   var truncated = formatted.length > 355 ? formatted.substr(0, 356) + "\u2026" : formatted;
@@ -40,8 +40,8 @@ function createSubmission(text, fillStyle, ip, isResponse, responseText) {
   .then(output => fs.writeFile("./submission.jpeg", output, function(err) {
     if (err) console.log(err);
     fs.exists("./submission.jpeg", function(exists) {
-      if (exists && isResponse) publish(responseText, ip, isResponse);
-      else if (exists && !isResponse) publish(text, ip, isResponse);
+      if (exists && isResponse) publish(responseText, ip, isResponse, color);
+      else if (exists && !isResponse) publish(text, ip, isResponse, color);
     })
   }));
   fs.unlinkSync('./submission.png');
@@ -70,7 +70,7 @@ function createResponse(text, originalText, ip) {
   fs.unlinkSync('./response.png');
 }
 
-function publish(caption, ip, isResponse) {
+function publish(caption, ip, isResponse, color) {
   if (isResponse) {
     var photos = [
       {
@@ -106,7 +106,8 @@ function publish(caption, ip, isResponse) {
       })
     });
   }
-  log(caption, ip);
+
+  log(caption, ip, color);
 }
 
 function postComment(id, comment) {
@@ -134,7 +135,7 @@ function delPost(id) {
   })
 }
 
-function log(caption, ip) {
+function log(caption, ip, color) {
   var now = new Date();
   // set to eastern time
   now.setTime(now.getTime()+now.getTimezoneOffset()*60*1000);
@@ -144,7 +145,8 @@ function log(caption, ip) {
   logs('Anonbot Logs').create({
     "Time": formattedDate,
     "Post": caption,
-    "IP Hash": ""+sha256(ip)
+    "IP Hash": ""+sha256(ip),
+    "Color": ""+color
   }, function(err, record) {
     if (err) { console.error(err); return; }
     console.log("new log created! " + record.getId());
@@ -176,6 +178,19 @@ function determineIfBanned(address) {
   })
 }
 
+function getLastColor() {
+  return new Promise(function(resolve, reject) {
+    logs('Anonbot Logs').select({
+      sort: [{field: "Time", direction: "desc"}],
+      view: "Grid view"
+    }).eachPage(function page(records, fetchNextPage) {
+      records.forEach(function(record) {
+        resolve(record.get('Color'))
+      })
+    })
+  })
+}
+
 function getShortcode(url) {
   var parts = url.split('/');
   return parts[4];
@@ -188,7 +203,11 @@ app.use(bodyParser.json());
 app.post("/submission", function(req, res) {
   console.log("received submission " + req.body.anon);
   if (req.body.anon === "") return res.redirect('/');
-  createSubmission(req.body.anon, '#404040', getClientIP(req), false);
+  getLastColor().then(function(color) {
+    if (color === "red") createSubmission(req.body.anon, '#165B33', getClientIP(req), false, "", "green");
+    else createSubmission(req.body.anon, '#BB2528', getClientIP(req), false, "", "red");
+  })
+  //createSubmission(req.body.anon, '#404040', getClientIP(req), false);
   return res.redirect('/submitted');
 });
 app.post("/postcomment", function(req, res) {
