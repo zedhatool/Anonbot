@@ -191,8 +191,7 @@ function getWhichColor() {
     .then(function(session) {
       session.getAccount()
       .then(function(account) {
-        var count = account.params.mediaCount;
-        if (count % 2 === 0) resolve("green");
+        if (account.params.mediaCount % 2 === 0) resolve("green");
         else resolve("red");
       })
     })
