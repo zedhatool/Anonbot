@@ -153,8 +153,7 @@ function log(caption, ip, color) {
   logs('Anonbot Logs').create({
     "Time": formattedDate,
     "Post": caption,
-    "IP Hash": ""+sha256(ip),
-    "Color": ""+color
+    "IP Hash": ""+sha256(ip)
   }, function(err, record) {
     if (err) { console.error(err); return; }
     console.log("new log created! " + record.getId());
