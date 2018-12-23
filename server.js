@@ -113,7 +113,7 @@ function publish(caption, ip, isResponse, color) {
     });
   }
 
-  log(caption, ip, color);
+  log(caption, ip);
 }
 
 function postComment(id, comment) {
@@ -186,14 +186,15 @@ function determineIfBanned(address) {
   })
 }
 
-function getLastColor() {
+function getWhichColor() {
   return new Promise(function(resolve, reject) {
-    logs('Anonbot Logs').select({
-      sort: [{field: "Time", direction: "desc"}],
-      view: "Grid view"
-    }).eachPage(function page(records, fetchNextPage) {
-      records.forEach(function(record) {
-        resolve(record.get('Color'))
+    Client.Session.create(device, storage, 'anonbot.wl', process.env.ANON_PASSWORD)
+    .then(function(session) {
+      session.getAccount()
+      .then(function(account) {
+        var count = account.params.mediaCount;
+        if (count % 2 === 0) resolve("green");
+        else resolve("red");
       })
     })
   })
@@ -211,7 +212,7 @@ app.use(bodyParser.json());
 app.post("/submission", function(req, res) {
   console.log("received submission " + req.body.anon);
   if (req.body.anon === "") return res.redirect('/');
-  getLastColor().then(function(color) {
+  getWhichColor().then(function(color) {
     if (color === "red") createSubmission(req.body.anon, '#165B33', getClientIP(req), false, "", "green");
     else createSubmission(req.body.anon, '#BB2528', getClientIP(req), false, "", "red");
   })
