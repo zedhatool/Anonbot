@@ -1,4 +1,4 @@
-# Anonbotv2
+# Anonbot
 A bot for West Side students to submit confessions and announce anonymously!
 
 # Rules
