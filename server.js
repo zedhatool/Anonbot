@@ -129,7 +129,7 @@ function postReponse(url, comment, ip) {
   .then(function(session) {
     return Client.Media.getByUrl(session, url)
     .then(function(data) {
-      getLastColor().then(function(color) {
+      getWhichColor().then(function(color) {
         createResponse(comment, data._params.caption, ip, color);
       })
     })
