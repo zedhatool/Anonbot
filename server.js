@@ -50,8 +50,8 @@ function createResponse(text, originalText, ip, color) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   var formatted = wrap(text, {indent: '', width: 28});
   var truncated = formatted.length > 355 ? formatted.substr(0, 356) + "\u2026" : formatted;
-  if (color === "red") ctx.fillStyle = "#165B33";
-  else ctx.fillStyle = "#BB2528";
+  if (color === "red") ctx.fillStyle = "#b20000";
+  else ctx.fillStyle = "#404040";
   //ctx.fillStyle = "#c6c6c6";
   ctx.fillRect(0, 0, 1080, 1080);
   ctx.font = '62px "SourceCodePro"';
@@ -68,8 +68,8 @@ function createResponse(text, originalText, ip, color) {
     fs.exists("./response.jpeg", function(exists) {
       if (exists) {
         console.log(color);
-        if (color === "green") createSubmission(originalText, '#165B33', ip, true, text + "\n---\n" + originalText, "red");
-        else createSubmission(originalText, '#BB2528', ip, true, text + "\n---\n" + originalText, "green");
+        if (color === "gray") createSubmission(originalText, '#b20000', ip, true, text + "\n---\n" + originalText, "red");
+        else createSubmission(originalText, '#404040', ip, true, text + "\n---\n" + originalText, "gray");
       }
     })
   }));
@@ -191,7 +191,7 @@ function getWhichColor() {
     .then(function(session) {
       session.getAccount()
       .then(function(account) {
-        if (account.params.mediaCount % 2 === 0) resolve("green");
+        if (account.params.mediaCount % 2 === 0) resolve("gray");
         else resolve("red");
       })
     })
@@ -211,8 +211,8 @@ app.post("/submission", function(req, res) {
   console.log("received submission " + req.body.anon);
   if (req.body.anon === "") return res.redirect('/');
   getWhichColor().then(function(color) {
-    if (color === "red") createSubmission(req.body.anon, '#165B33', getClientIP(req), false, "", "green");
-    else createSubmission(req.body.anon, '#BB2528', getClientIP(req), false, "", "red");
+    if (color === "red") createSubmission(req.body.anon, '#b20000', getClientIP(req), false, "", "gray");
+    else createSubmission(req.body.anon, '#404040', getClientIP(req), false, "", "red");
   })
   //createSubmission(req.body.anon, '#404040', getClientIP(req), false);
   return res.redirect('/submitted');
@@ -260,7 +260,7 @@ app.post("/delpost", function(req, res) {
 app.post("/modpost", function(req, res) {
   console.log("received mod post request " + req.body.mod);
   if (req.body.key === process.env.MOD_KEY) {
-    createSubmission(req.body.mod, '#b20000', false);
+    createSubmission(req.body.mod, '#e59d0b', false); // prev. #b20000
     return res.redirect('/submitted');
   } else {
     console.log("request denied: incorrect mod key");
