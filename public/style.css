@@ -129,3 +129,38 @@ button:hover {
   font-family: 'SourceCodeProBold';
   src: url('https://cdn.glitch.com/3269c758-900f-4003-a9b7-a3d1b265644c%2FSourceCodePro-Bold.ttf?1535920143884');
 }
+
+#faqDialog {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    min-width: 300px;
+    background-color: white;
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-left: -100%;
+    -webkit-transition: margin-left 0.5s;
+    transition: margin-left 0.5s;
+}
+
+.faq-entry {
+    box-shadow: 15px 5px 16px 0 rgba(0,0,0,0.2);
+    border-radius: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.faq-entry > h1 {
+    color: #606060;
+    margin-bottom: 0px;
+    font-size: 24px;
+}
+
+.faq-entry > p {
+    color: #606060;
+}

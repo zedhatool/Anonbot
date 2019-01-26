@@ -21,16 +21,32 @@
     <br/>
     <a href="https://github.com/MatthewStanciu/Anonbotv2" target="_blank"><p>View code on GitHub</p></a>
 
+    <div id="faqButtonContainer">
+         <button type="button" v-on:click="faqDialog">FAQ</button>
+    </div>
+
+    <div id="faqDialog" v-bind:style="{marginLeft: marginLeft}" v-bind:click-outside="toggleDialog">
+         <div class="faq-entry">
+              <h1>Test</h1>
+              <p>Test Text</p>
+         </div>
+         <div class="faq-entry">
+              <h1>Test</h1>
+              <p>Test Text</p>
+         </div>
+         <div class="faq-entry">
+              <h1>Test</h1>
+              <p>Test Text</p>
+         </div>
+         <div class="faq-entry">
+              <h1>Test</h1>
+              <p>Test Text</p>
+         </div>
+    </div>
     <div id="snackbar">You can only comment on Anonbot posts!</div>
-    <script>
-      if (document.referrer === "http://localhost:3000/comment" || document.referrer === "https://anonbotwl.glitch.me/comment") {
-        showSnackbar();
-      }
-      function showSnackbar() {
-        var x = document.getElementById("snackbar");
-        x.className = "show";
-        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
-      }
-    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <script src="../public/main.js"></script>
   </body>
 </html>
